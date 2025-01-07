@@ -49,7 +49,7 @@ if action == 'Adicionar indisponibilidades':
 if action == 'Alterar data da LicPag':
     mes_alt = st.selectbox('Mês da alteração:', meses)
     if mes_alt != '-':
-        data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), calendar.monthrange(ano, meses.index(mes_alt))[-1]), format='DD/MM/YYYY')
+        data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), monthrange(ano, meses.index(mes_alt))[-1]), format='DD/MM/YYYY')
         send_alt = st.button('Enviar')
         if send_alt and mes_alt:
             licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
