@@ -64,16 +64,18 @@ esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
 esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
 
 esc_preta.set_index('DATA', inplace=True)
+esc_vermelha.set_index('DATA', inplace=True)
 
 for d in esc_preta.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1]
-# for d in esc_vermelha[1:]:
-#     esc = get_disponivel(d, efetivo, restrito)
-#     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
 
-st.write(esc_preta)
+for d in esc_vermelha.index[1:]:
+    esc = get_disponivel(d, efetivo, restrito)
+    esc_vermelha.loc[d, 'NOME'] = esc[esc.index(esc_vermelha.loc[preta[preta.index(d) - 1], 'NOME']) - 1]
+
+st.write(esc_vermelha)
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
