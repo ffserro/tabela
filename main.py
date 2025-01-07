@@ -72,10 +72,10 @@ for d in esc_preta.index[1:]:
     st.write(esc_preta.loc[preta[preta.index(d) - 1], 'NOME'])
     st.write(esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']))
     st.write(esc[6])
-    st.write(esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME'][0]) + 1])
+    st.write(esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME']) + 1])
     st.write(d)
     st.write(esc_preta.loc[esc_preta.DATA==d, 'NOME'])
-    esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME'][0]) + 1]
+    esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME']) + 1]
 
 # for d in esc_vermelha[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
