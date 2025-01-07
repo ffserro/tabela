@@ -63,16 +63,14 @@ esc_vermelha = pd.DataFrame({'DATA':vermelha})
 esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
 esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
 
-# for d in esc_preta[1:]:
-#     esc = get_disponivel(d, efetivo, restrito)
-#     esc = esc + [esc[0]]
-#     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) + 1]
+for d in esc_preta.iloc[1:]:
+    esc = get_disponivel(d, efetivo, restrito)
+    esc = esc + [esc[0]]
+    esc_preta.loc[esc_preta.DATA==d, 'NOME'] = esc[esc.index(esc_preta[d-td(1)]) + 1]
 
 # for d in esc_vermelha[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
 #     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
-
-st.write(st.session_state.licpag)
 
 st.write(esc_preta)
 
