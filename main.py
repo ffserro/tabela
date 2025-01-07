@@ -169,6 +169,8 @@ if action == 'Troca de serviço':
     troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
     st.session_state.conn.update(worksheet='TROCA', data=troca)
 
+st.write(licpag)
+
 st.divider()
 
 gera_mes = meses.index(st.selectbox('Gerar tabela do mês:', meses))
