@@ -36,8 +36,17 @@ for d in vermelha:
 vermelha.sort()
 
 efetivo = st.session_state.efetivo
-efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True)
-st.write(efetivo['EMBARQUE'])
+efetivo[['EMBARQUE', 'DESEMBARQUE']] = pd.to_datetime(efetivo[['EMBARQUE', 'DESEMBARQUE']], dayfirst=True)
+
+st.write(efetivo)
+
+df get_disponivel(data, efetivo, indisponibilidades):
+    disp = list(efetivo.NOME.values)
+    for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
+        disp.remove(i)
+    
+    return disp
+    
 
 esc_preta = {}
 esc_vermelha = {}
