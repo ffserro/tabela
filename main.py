@@ -122,7 +122,9 @@ st.write(geral_corrida)
 st.write(esc_vermelha)
 st.write(esc_preta)
 
-conflitos = {i:geral_corrida.iloc[i].values for i in range(len(geral_corrida))}
+conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
+
+
 st.write(conflitos)
 
 # for m in range(1, 13):
