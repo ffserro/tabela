@@ -45,8 +45,6 @@ if action == 'Adicionar indisponibilidades':
     if send_ind and mil_ind != '-':
         restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
         restrito = restrito.sort_values(by='INICIAL')
-        st.session_state.conn.update(worksheet='REST', data=restrito)
-        connect()
 
 if action == 'Alterar data da LicPag':
     mes_alt = st.selectbox('Mês da alteração:', meses)
@@ -55,8 +53,7 @@ if action == 'Alterar data da LicPag':
         send_alt = st.button('Enviar')
         if send_alt and mes_alt:
             licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
-            st.session_state.conn.update(worksheet='LICPAG', data=licpag)
-            connect()
+            
 
 if action == 'Embarque':
     nome_emb = st.text_input('Nome do embarcado:')
@@ -65,16 +62,12 @@ if action == 'Embarque':
     emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
     if st.button('Enviar'):
         efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
-        st.session_state.conn.update(worksheet='EMB', data=efetivo)
-        connect()
     
 if action == 'Desembarque':
     nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
     data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     if st.button('Enviar'):
         efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
-        st.session_state.conn.update(worksheet='EMB', data=efetivo)
-        connect()
     
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
@@ -155,8 +148,11 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
             if b - a <= td(2):
                 ps.append((a, b))
         conflitos[nome] = ps
-        
+
+st.session_state.conn.update(worksheet='EMB', data=efetivo)
+st.session_state.conn.update(worksheet='REST', data=restrito)
 st.session_state.conn.update(worksheet='TROCA', data=troca)
+st.session_state.conn.update(worksheet='LICPAG', data=licpag)
 
 if action == 'Troca de serviço':
     de = st.date_input('De:', dt.today())
