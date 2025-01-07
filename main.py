@@ -122,6 +122,9 @@ st.write(geral_corrida)
 st.write(esc_vermelha)
 st.write(esc_preta)
 
+conflitos = {i:geral_corrida.iloc[i].values for i in range(len(geral_corrida))}
+st.write(conflitos)
+
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
 #                         'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == m],
