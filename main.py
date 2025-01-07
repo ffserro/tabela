@@ -37,4 +37,4 @@ for d in vermelha:
         preta.remove(d + td(1))
 
 st.write(vermelha)
-st.write(preta)
+st.write(feriados)
