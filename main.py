@@ -57,7 +57,7 @@ if action == 'Alterar data da LicPag':
 
 if action == 'Embarque':
     nome_emb = st.text_input('Nome do embarcado:')
-    comimsup_emb = st.select_box('Quem é o ComImSup do velha guarda?', )
+    comimsup_emb = st.selectbox('Quem é o ComImSup do velha guarda?', )
     data_emb = st.date_input('Data do embarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
     efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
