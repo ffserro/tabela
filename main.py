@@ -123,6 +123,8 @@ st.write(esc_vermelha)
 st.write(esc_preta)
 
 conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
+st.write(conflitos)
+
 for nome in conflitos:
     ps = []
     for i in range(len(conflitos[nome])-1):
