@@ -63,12 +63,12 @@ esc_vermelha = {i:'' for i in vermelha}
 esc_preta[dt(2025, 1, 6)] = 'CT(IM) Sêrro'
 esc_vermelha[dt(2025, 1, 1)] = 'CT Felipe Gondim'
 
-for d in esc_preta:
+for d in esc_preta[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) + 1]
 
-for d in esc_vermelha:
+for d in esc_vermelha[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
 
