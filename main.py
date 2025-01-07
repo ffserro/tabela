@@ -72,7 +72,7 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 #     esc = get_disponivel(d, efetivo, restrito)
 #     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
 
-st.write(esc_preta)
+st.write(esc_vermelha)
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
