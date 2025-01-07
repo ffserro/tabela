@@ -45,8 +45,6 @@ restrito = st.session_state.restrito
 restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
 restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
 
-st.write(efetivo)
-
 def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
@@ -72,6 +70,8 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 # for d in esc_vermelha[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
 #     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
+
+st.write(st.session_state.licpag)
 
 st.write(esc_preta)
 
