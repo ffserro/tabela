@@ -65,6 +65,8 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 
 esc_preta.set_index('DATA', inplace=True)
 
+st.write(esc_preta)
+
 for d in esc_preta.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
