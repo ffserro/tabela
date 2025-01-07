@@ -110,10 +110,6 @@ esc_vermelha.set_index('DATA', inplace=True)
 for d in esc_preta.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
-    st.write(licpag.DATA.values)
-    st.write(d)
-    st.write(esc)
-    st.write(preta)
     st.write(esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1])
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1]
 
