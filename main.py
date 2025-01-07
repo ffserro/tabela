@@ -19,8 +19,17 @@ ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
-datas = [i.strftime('%d/%m/%Y') for i in datas]
+# datas = [i.strftime('%d/%m/%Y') for i in datas]
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)]
 
-st.write(feriados)
+vermelha, preta = [], []
+
+for d in datas:
+    if d.weekday() in (5,6) or d in feriados:
+        vermelha.append(d)
+    else:
+        preta.append(d)
+
+st.write(vermelha)
+st.write(preta)
