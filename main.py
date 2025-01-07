@@ -162,7 +162,7 @@ if action == 'Troca de serviço':
 
 gera_mes = st.selectbox('Gerar tabela do mês:', meses)
 if gera_mes != '-':
-    st.write(geral_corrida[geral_corrida.index.month==gera_mes])
+    st.write(geral_corrida[geral_corrida.index.dt.month==gera_mes])
 if st.button('Gerar!') and gera_mes != '-':
     df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[d] for d in datas if d.month == gera_mes]})
     st.session_state.conn.update(worksheet=gera_mes, data=df)
