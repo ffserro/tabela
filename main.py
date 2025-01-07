@@ -13,7 +13,9 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
-st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
+
+licpag = st.session_state.licpag
+licpag['DATA'] = pd.to_datetime(licpag['DATA'], dayfirst=True).dt.date
 
 efetivo = st.session_state.efetivo
 efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
@@ -28,17 +30,41 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
-action = st.selectbox('Qual ação você deseja executar?', ['', 'Adicionar indisponibilidades'])
+action = st.selectbox('Qual ação você deseja executar?', ['', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
 
 if action == 'Adicionar indisponibilidades':
+    st.write('Joga aí pra gente:')
     mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
     per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
     send_ind = st.button('Enviar')
-    if send_ind:
+    if send_ind and mil_ind != '-':
         restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
+        st.session_state.conn.update(worksheet='REST', data=restrito)
 
-st.write(restrito)
+if action == 'Alterar data da LicPag':
+    mes_alt = st.selectbox('Mês da alteração:', ['-'] + list(licpag.MES))
+    data_alt = st.date_input('Data da LicPag:', dt.today()+td(30), format('DD/MM/YYYY'))
+    send_alt = st.button('Enviar')
+    if send_alt and mes_alt != '-':
+        licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
+        st.session_state.conn.update(worksheet='LICPAG', data=licpag)
+
+if action == 'Embarque':
+    nome_emb = st.text_input('Nome do embarcado:')
+    comimsup_emb = st.select_box('Quem é o ComImSup do velha guarda?', )
+    data_emb = st.date_input('Data do embarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
+    emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
+    efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
+    st.session_state.conn.update(worksheet='EMB', data=efetivo)
+    
+if action == 'Desembarque':
+    nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
+    data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
+    efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
+    st.session_state.conn.update(worksheet='EMB', data=efetivo)
+    
+
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
