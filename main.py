@@ -2,6 +2,7 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import date as dt, timedelta as td
+from calendar import monthrange
 
 import holidays
 
@@ -30,7 +31,7 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
-action = st.selectbox('Qual ação você deseja executar?', ['', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
+action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
 
 if action == 'Adicionar indisponibilidades':
     st.write('Joga aí pra gente:')
@@ -44,7 +45,7 @@ if action == 'Adicionar indisponibilidades':
 
 if action == 'Alterar data da LicPag':
     mes_alt = st.selectbox('Mês da alteração:', ['-'] + list(licpag.MES))
-    data_alt = st.date_input('Data da LicPag:', dt.today(), format='DD/MM/YYYY')
+    data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), calendar.monthrange(ano, meses.index(mes_alt))[-1), format='DD/MM/YYYY')
     send_alt = st.button('Enviar')
     if send_alt and mes_alt != '-':
         licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
