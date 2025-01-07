@@ -16,4 +16,7 @@ st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-st.write([dt(ano, 1, 1) + td(i) for i in range(365)])
+datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
+datas = [i.strftime('%d%m%Y') for i in datas]
+
+st.write(datas)
