@@ -17,6 +17,6 @@ ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
-datas = [i.strftime('%d%m%Y') for i in datas]
+datas = [i.strftime('%d/%m/%Y') for i in datas]
 
 st.write(datas)
