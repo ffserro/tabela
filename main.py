@@ -45,7 +45,6 @@ if action == 'Adicionar indisponibilidades':
         restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
         restrito = restrito.sort_values(by='INICIAL')
         st.session_state.conn.update(worksheet='REST', data=restrito)
-        st.rerun()
 
 if action == 'Alterar data da LicPag':
     mes_alt = st.selectbox('Mês da alteração:', meses)
@@ -55,7 +54,6 @@ if action == 'Alterar data da LicPag':
         if send_alt and mes_alt:
             licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
             st.session_state.conn.update(worksheet='LICPAG', data=licpag)
-            st.rerun()
 
 if action == 'Embarque':
     nome_emb = st.text_input('Nome do embarcado:')
@@ -65,7 +63,6 @@ if action == 'Embarque':
     if st.button('Enviar'):
         efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
         st.session_state.conn.update(worksheet='EMB', data=efetivo)
-        st.rerun()
     
 if action == 'Desembarque':
     nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
@@ -73,7 +70,6 @@ if action == 'Desembarque':
     if st.button('Enviar'):
         efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
         st.session_state.conn.update(worksheet='EMB', data=efetivo)
-        st.rerun()
     
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
