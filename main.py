@@ -2,11 +2,8 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
 from datetime import date as dt, timedelta as td
-from dateutil import tz
 
 import holidays
-
-tzinfo = tz.gettz('America/Sao_Paulo')
 
 st.title('TABELONA')
 
@@ -21,7 +18,7 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 # datas = [i.strftime('%d/%m/%Y') for i in datas]
 
-feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)]
+feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
 vermelha, preta = [], []
 
@@ -37,6 +34,11 @@ for d in vermelha:
         preta.remove(d + td(1))
 
 vermelha.sort()
+
+st.write(st.session_state.efetivo)
+
+esc_preta = {}
+esc_vermelha = {}
 
 for m in range(1, 13):
     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
