@@ -151,13 +151,18 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
         conflitos[nome] = ps
         
 st.session_state.conn.update(worksheet='TROCA', data=troca.sort_values(by='DE'))
-st.write(conflitos)
-st.write(geral_corrida)
 
 if action == 'Troca de serviço':
     de = st.date_input('De:', dt.today())
     para = st.date_input('Para:', dt.today())
     motivo_troca = st.text_input('Motivo da troca:')
+    geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
+    troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
+    st.session_state.conn.update(worksheet='TROCA', data=troca.sort_values(by='DE'))
+
+gera_mes = st.selectbox('Gerar tabela do mês:', meses)
+if st.button('Gerar!') and gera_mes != '-':
+    df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[d] for d in datas if d.month == gera_mes]})
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
