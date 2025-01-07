@@ -10,6 +10,10 @@ st.title('TABELONA')
 
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
+# EFETIVO DOS QUE CONCORREM A ESCALA
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 
-st.write(st.session_state.efetivo)
+ano = 2025
+meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
+
+str.write([date(ano, 1, 1) + timedelta(i) for i in range(365)])
