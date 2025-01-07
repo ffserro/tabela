@@ -11,6 +11,7 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 # EFETIVO DOS QUE CONCORREM A ESCALA
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
+st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
@@ -39,18 +40,39 @@ efetivo = st.session_state.efetivo
 efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True)
 efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True)
 
+restrito = st.session_state.restrito
+restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True)
+restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True)
+
 st.write(efetivo)
 
-def get_disponivel(data, efetivo, indisponibilidades):
+def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
         disp.remove(i)
+    for i in restrito[(restrito.INICIAL >= data) | (restrito.FINAL <= data)].NOME.unique():
+        if i in disp:
+            disp.remove(i)
     
     return disp
     
 
-esc_preta = {}
-esc_vermelha = {}
+esc_preta = {i:'' for i in preta}
+esc_vermelha = {i:'' for i in vermelha}
+
+esc_preta[dt(2025, 1, 6)] = 'CT(IM) Sêrro'
+esc_vermelha[dt(2025, 1, 1)] = 'CT Felipe Gondim'
+
+for d in esc_preta:
+    esc = get_disponivel(d, efetivo, restrito)
+    esc = esc + [esc[0]]
+    esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) + 1]
+
+for d in esc_vermelha:
+    esc = get_disponivel(d, efetivo, restrito)
+    esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
+
+st.write(esc_preta)
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
