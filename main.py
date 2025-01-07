@@ -160,7 +160,7 @@ if action == 'Troca de serviço':
     motivo_troca = st.text_input('Motivo da troca:')
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
     troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
-    st.session_state.conn.update(worksheet='TROCA', data=troca.sort_values(by='DE'))
+    st.session_state.conn.update(worksheet='TROCA', data=troca)
 
 st.divider()
 
