@@ -66,7 +66,7 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 for d in esc_preta.DATA.iloc[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
-    esc_preta.loc[esc_preta.DATA==d, 'NOME'] = esc[esc.index(esc_preta[d-td(1)]) + 1]
+    esc_preta.loc[esc_preta.DATA==d, 'NOME'] = esc[esc.index(esc_preta.loc[esc_preta.DATA == d-td(1), 'NOME']) + 1]
 
 # for d in esc_vermelha[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
