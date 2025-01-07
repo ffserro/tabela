@@ -16,6 +16,8 @@ st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
 
+troca = st.session_state.troca
+
 licpag = st.session_state.licpag
 licpag['DATA'] = pd.to_datetime(licpag['DATA'], dayfirst=True).dt.date
 
@@ -115,10 +117,7 @@ for d in esc_vermelha.index[1:]:
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
-st.write(geral_corrida)
-
 conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
-st.write(conflitos)
 
 for nome in conflitos:
     ps = []
@@ -136,9 +135,11 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
     
             if pre < ver:
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
+                troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
             else:
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 2]] = geral_corrida.loc[preta[preta.index(pre) + 2]], geral_corrida.loc[pre]
-
+                troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 2]], 'MOTIVO':['AUTOMÁTICA']})])
+    
     conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
     
     for nome in conflitos:
@@ -148,7 +149,8 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
             if b - a <= td(2):
                 ps.append((a, b))
         conflitos[nome] = ps
-    
+        
+st.session_state.conn.update(worksheet='TROCA', data=troca)
 st.write(conflitos)
 st.write(geral_corrida)
 
