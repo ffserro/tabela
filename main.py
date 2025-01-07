@@ -32,7 +32,7 @@ for d in datas:
         preta.append(d)
 
 for d in vermelha:
-    if d + td(2) in vermelha:
+    if (d + td(2) in vermelha) and (d + td(1) not in vermelha):
         vermelha.append(d + td(1))
         preta.remove(d + td(1))
 
