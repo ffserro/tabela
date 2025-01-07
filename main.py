@@ -36,7 +36,6 @@ for d in vermelha:
 vermelha.sort()
 
 efetivo = st.session_state.efetivo
-efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'])
 st.write(efetivo['EMBARQUE'])
 
 esc_preta = {}
