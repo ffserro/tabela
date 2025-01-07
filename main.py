@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from datetime import datetime as dt, timedelta as td
+from datetime import date as dt, timedelta as td
 from dateutil import tz
 
 import holidays
