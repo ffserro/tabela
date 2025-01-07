@@ -60,14 +60,16 @@ if action == 'Embarque':
     comimsup_emb = st.selectbox('Quem é o ComImSup do velha guarda?', list(efetivo.NOME))
     data_emb = st.date_input('Data do embarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
-    efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
-    st.session_state.conn.update(worksheet='EMB', data=efetivo)
+    if st.button('Enviar'):
+        efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
+        st.session_state.conn.update(worksheet='EMB', data=efetivo)
     
 if action == 'Desembarque':
     nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
     data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
-    st.session_state.conn.update(worksheet='EMB', data=efetivo)
+    if st.button('Enviar'):
+        efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
+        st.session_state.conn.update(worksheet='EMB', data=efetivo)
     
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
