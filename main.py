@@ -57,11 +57,11 @@ def get_disponivel(data, efetivo, restrito):
     return disp
     
 
-esc_preta = {i:'' for i in preta}
-esc_vermelha = {i:'' for i in vermelha}
+esc_preta = pd.DataFrame({'DATA':preta})
+esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
-esc_preta[dt(2025, 1, 6)] = 'CT(IM) Sêrro'
-esc_vermelha[dt(2025, 1, 1)] = 'CT Felipe Gondim'
+esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
+esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
 
 # for d in esc_preta[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
