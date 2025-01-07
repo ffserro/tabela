@@ -160,9 +160,9 @@ if action == 'Troca de serviço':
     troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
     st.session_state.conn.update(worksheet='TROCA', data=troca.sort_values(by='DE'))
 
-gera_mes = st.selectbox('Gerar tabela do mês:', meses)
-if gera_mes != '-':
-    st.write(geral_corrida.index)
+gera_mes = meses.index(st.selectbox('Gerar tabela do mês:', meses))
+if gera_mes != 0:
+    st.write(geral_corrida.index.dt.month==gera_mes)
 if st.button('Gerar!') and gera_mes != '-':
     df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[d] for d in datas if d.month == gera_mes]})
     st.session_state.conn.update(worksheet=gera_mes, data=df)
