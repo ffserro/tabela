@@ -65,8 +65,6 @@ if action == 'Desembarque':
     efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
     st.session_state.conn.update(worksheet='EMB', data=efetivo)
     
-
-
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
 vermelha, preta = [], []
@@ -113,7 +111,14 @@ for d in esc_vermelha.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc_vermelha.loc[d, 'NOME'] = esc[esc.index(esc_vermelha.loc[vermelha[vermelha.index(d) - 1], 'NOME']) - 1]
 
-st.write(esc_vermelha)
+geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
+
+if action = 'Troca de serviço':
+    de = st.date_input('De:', dt.today())
+    para = st.date_input('Para:', dt.today())
+    motivo_troca = st.text_input('Motivo da troca:')
+
+st.write(geral_corrida)
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
