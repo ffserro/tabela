@@ -74,7 +74,7 @@ for d in esc_preta.index[1:]:
     st.write(esc[6])
     st.write(esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME']) + 1])
     st.write(d)
-    st.write(esc_preta.loc[esc_preta.DATA==d, 'NOME'])
+    st.write(esc_preta.loc[d, 'NOME'])
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME']) + 1]
 
 # for d in esc_vermelha[1:]:
