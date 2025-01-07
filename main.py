@@ -150,7 +150,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 ps.append((a, b))
         conflitos[nome] = ps
         
-st.session_state.conn.update(worksheet='TROCA', data=troca)
+st.session_state.conn.update(worksheet='TROCA', data=troca.sort_values(by='DE'))
 st.write(conflitos)
 st.write(geral_corrida)
 
