@@ -123,7 +123,13 @@ st.write(esc_vermelha)
 st.write(esc_preta)
 
 conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
-
+for nome in conflitos:
+    ps = []
+    for i in range(len(conflitos[nome])-1):
+        if conflitos[nome][i+1] - conflitos[nome][i] <= td(2):
+            ps.append((conflitos[nome][i], conflitos[nome][i+i]))
+    conflitos[nome] = ps
+        
 
 st.write(conflitos)
 
