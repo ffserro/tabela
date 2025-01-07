@@ -36,5 +36,7 @@ for d in vermelha:
         vermelha.append(d + td(1))
         preta.remove(d + td(1))
 
+vermelha.sort()
+
 st.write(vermelha)
 st.write(feriados)
