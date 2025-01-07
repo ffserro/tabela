@@ -31,5 +31,10 @@ for d in datas:
     else:
         preta.append(d)
 
+for d in vermelha:
+    if d + td(2) in vermelha:
+        vermelha.append(d + td(1))
+        preta.remove(d + td(1))
+
 st.write(vermelha)
 st.write(preta)
