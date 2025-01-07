@@ -70,7 +70,7 @@ st.write(esc_preta)
 for d in esc_preta.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
-    st.write(esc.index(esc_preta.loc[(d-td(1)), 'NOME'][0]))
+    st.write(esc.index(esc_preta.loc[preta[preta.index(d)-1], 'NOME'][0]))
     st.write(esc[6])
     st.write(esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME'][0]) + 1])
     st.write(d)
