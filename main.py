@@ -8,9 +8,7 @@ import holidays
 
 st.title('TABELONA DO 💡')
 
-def connect():
-    st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
-connect()
+st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
@@ -45,6 +43,7 @@ if action == 'Adicionar indisponibilidades':
     if send_ind and mil_ind != '-':
         restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
         restrito = restrito.sort_values(by='INICIAL')
+        st.rerun()
 
 if action == 'Alterar data da LicPag':
     mes_alt = st.selectbox('Mês da alteração:', meses)
@@ -53,6 +52,7 @@ if action == 'Alterar data da LicPag':
         send_alt = st.button('Enviar')
         if send_alt and mes_alt:
             licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
+            st.rerun()
             
 
 if action == 'Embarque':
@@ -62,13 +62,15 @@ if action == 'Embarque':
     emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
     if st.button('Enviar'):
         efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
+        st.rerun()
     
 if action == 'Desembarque':
     nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
     data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     if st.button('Enviar'):
         efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
-    
+        st.rerun()
+        
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
 vermelha, preta = [], []
