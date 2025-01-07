@@ -114,6 +114,7 @@ for d in esc_preta.index[1:]:
     esc = esc + [esc[0]]
     st.write(esc)
     st.write(d)
+    st.write(type(d))
     st.write(preta)
     st.write(esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1])
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1]
