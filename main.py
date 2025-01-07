@@ -37,12 +37,12 @@ for d in vermelha:
 vermelha.sort()
 
 efetivo = st.session_state.efetivo
-efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True)
-efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True)
+efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
+efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True).dt.date
 
 restrito = st.session_state.restrito
-restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True)
-restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True)
+restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
+restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
 
 st.write(efetivo)
 
