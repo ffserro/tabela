@@ -37,7 +37,6 @@ datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
 
 if action == 'Adicionar indisponibilidades':
-    st.write('Joga aí pra gente:')
     mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
     per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
@@ -48,7 +47,7 @@ if action == 'Adicionar indisponibilidades':
         st.session_state.conn.update(worksheet='REST', data=restrito)
 
 if action == 'Alterar data da LicPag':
-    mes_alt = st.selectbox('Mês da alteração:', ['-'] + list(licpag.MES))
+    mes_alt = st.selectbox('Mês da alteração:', meses)
     data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), calendar.monthrange(ano, meses.index(mes_alt))[-1]), format='DD/MM/YYYY')
     send_alt = st.button('Enviar')
     if send_alt and mes_alt != '-':
