@@ -6,7 +6,7 @@ from calendar import monthrange
 
 import holidays
 
-st.title('TABELONA')
+st.title('TABELONA DO 💡')
 
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
@@ -113,7 +113,7 @@ for d in esc_vermelha.index[1:]:
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
-if action = 'Troca de serviço':
+if action == 'Troca de serviço':
     de = st.date_input('De:', dt.today())
     para = st.date_input('Para:', dt.today())
     motivo_troca = st.text_input('Motivo da troca:')
