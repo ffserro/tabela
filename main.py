@@ -63,7 +63,9 @@ esc_vermelha = pd.DataFrame({'DATA':vermelha})
 esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
 esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
 
-for d in esc_preta.DATA.iloc[1:]:
+esc_preta.set_index('DATA', inplace=True)
+
+for d in esc_preta.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
     st.write(esc.index(esc_preta.loc[esc_preta.DATA == (d-td(1)), 'NOME'][0]))
@@ -71,7 +73,7 @@ for d in esc_preta.DATA.iloc[1:]:
     st.write(esc[esc.index(esc_preta.loc[esc_preta.DATA == (d-td(1)), 'NOME'][0]) + 1])
     st.write(d)
     st.write(esc_preta.loc[esc_preta.DATA==d, 'NOME'])
-    esc_preta.loc[esc_preta['DATA']==d, 'NOME'] = esc[esc.index(esc_preta.loc[esc_preta.DATA == (d-td(1)), 'NOME'][0]) + 1]
+    esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[esc_preta.DATA == (d-td(1)), 'NOME'][0]) + 1]
 
 # for d in esc_vermelha[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
