@@ -21,7 +21,8 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
 if st.button('Adicionar indisponibilidade'):
-    nome = st.text_input('')
+    nome = st.text_input('Nome:')
+    periodo = st.date_input('Período:', (dt.today(), dt.today()), dt(ano, 1, 1), dt(ano, 12, 1)
 
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
