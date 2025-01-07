@@ -40,7 +40,7 @@ efetivo[['EMBARQUE', 'DESEMBARQUE']] = pd.to_datetime(efetivo[['EMBARQUE', 'DESE
 
 st.write(efetivo)
 
-df get_disponivel(data, efetivo, indisponibilidades):
+def get_disponivel(data, efetivo, indisponibilidades):
     disp = list(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
         disp.remove(i)
