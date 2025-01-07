@@ -30,13 +30,11 @@ for d in datas:
         vermelha.append(d)
     else:
         preta.append(d)
-try:
-    for d in vermelha:
-        if d + td(2) in vermelha:
-            vermelha.append(d + td(1))
-            preta.remove(d + td(1))
-except:
-    pass
+
+for d in vermelha:
+    if d + td(2) in vermelha:
+        vermelha.append(d + td(1))
+        preta.remove(d + td(1))
 
 st.write(vermelha)
 st.write(feriados)
