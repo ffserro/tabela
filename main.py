@@ -119,6 +119,8 @@ if action == 'Troca de serviço':
     motivo_troca = st.text_input('Motivo da troca:')
 
 st.write(geral_corrida)
+st.write(esc_vermelha)
+st.write(esc_preta)
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
