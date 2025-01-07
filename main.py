@@ -67,6 +67,7 @@ for d in esc_preta.DATA.iloc[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
     st.write(esc.index(esc_preta.loc[esc_preta.DATA == (d-td(1)), 'NOME'][0]))
+    st.write(esc[6])
     esc_preta.loc[esc_preta.DATA==d, 'NOME'] = esc[esc.index(esc_preta.loc[esc_preta.DATA == (d-td(1)), 'NOME'][0]) + 1]
 
 # for d in esc_vermelha[1:]:
