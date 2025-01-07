@@ -15,15 +15,28 @@ st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
 
+efetivo = st.session_state.efetivo
+efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
+efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True).dt.date
+
+restrito = st.session_state.restrito
+restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
+restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
+
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
 if st.button('Adicionar indisponibilidade'):
-    nome = st.text_input('Nome:')
-    periodo = st.date_input('Período:', (dt.today(), dt.today()), dt(ano, 1, 1), dt(ano, 12, 1))
+    mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
+    per_ind = st.date_input('Período:', [], min_value=date(ano, 1, 1), max_value=date(ano, 12, 1), format='DD/MM/YYYY')
+    mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
+    send_ind = st.form_submit_button('Enviar')
+    if send_ind:
+        restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
 
+st.write(restrito)
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
@@ -41,14 +54,6 @@ for d in vermelha:
         preta.remove(d + td(1))
 
 vermelha.sort()
-
-efetivo = st.session_state.efetivo
-efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
-efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True).dt.date
-
-restrito = st.session_state.restrito
-restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
-restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
 
 def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
