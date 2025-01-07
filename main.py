@@ -36,7 +36,8 @@ for d in vermelha:
 vermelha.sort()
 
 efetivo = st.session_state.efetivo
-st.write(efetivo['EMBARQUE'])
+
+st.write(efetivo['EMBARQUE'].dtype)
 
 esc_preta = {}
 esc_vermelha = {}
