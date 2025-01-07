@@ -8,7 +8,7 @@ import holidays
 
 st.title('TABELONA DO 💡')
 
-@st.cache_resource(ttl=60)
+st.cache_resource(ttl=60)
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
