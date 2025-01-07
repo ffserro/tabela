@@ -4,6 +4,8 @@ import pandas as pd
 from datetime import datetime as dt, timedelta as td
 from dateutil import tz
 
+import holidays
+
 tzinfo = tz.gettz('America/Sao_Paulo')
 
 st.title('TABELONA')
