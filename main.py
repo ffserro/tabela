@@ -8,9 +8,9 @@ import holidays
 
 st.title('TABELONA DO 💡')
 
+@st.cache_resource(ttl=60)  # Refresh every 60 seconds
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
-@st.cache_resource(ttl=60)  # Refresh every 60 seconds
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
