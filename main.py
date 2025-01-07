@@ -26,7 +26,7 @@ feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)]
 vermelha, preta = [], []
 
 for d in datas:
-    if d.weekday() in (5,6) or d in feriados:
+    if (d.weekday() in (5,6)) or (d in feriados):
         vermelha.append(d)
     else:
         preta.append(d)
