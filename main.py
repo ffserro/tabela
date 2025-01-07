@@ -28,6 +28,8 @@ restrito = st.session_state.restrito.copy()
 restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
 restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
 
+st.write(licpag)
+
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
@@ -168,8 +170,6 @@ if action == 'Troca de serviço':
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
     troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
     st.session_state.conn.update(worksheet='TROCA', data=troca)
-
-st.write(licpag)
 
 st.divider()
 
