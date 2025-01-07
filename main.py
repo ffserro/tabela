@@ -68,14 +68,8 @@ esc_preta.set_index('DATA', inplace=True)
 for d in esc_preta.index[1:]:
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
-    st.write(preta[preta.index(d) - 1])
-    st.write(esc_preta.loc[preta[preta.index(d) - 1], 'NOME'])
-    st.write(esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']))
-    st.write(esc[6])
-    st.write(esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME']) + 1])
-    st.write(d)
-    st.write(esc_preta.loc[d, 'NOME'])
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[(d-td(1)), 'NOME']) + 1]
+    st.write(esc_preta)
 
 # for d in esc_vermelha[1:]:
 #     esc = get_disponivel(d, efetivo, restrito)
