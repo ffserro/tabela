@@ -35,6 +35,23 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
+feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
+
+vermelha, preta = [], []
+
+for d in datas:
+    if (d.weekday() in (5,6)) or (d in feriados) or (d in st.session_state.licpag.DATA.values):
+        vermelha.append(d)
+    else:
+        preta.append(d)
+
+for d in vermelha:
+    if (d + td(2) in vermelha) and (d + td(1) not in vermelha):
+        vermelha.append(d + td(1))
+        preta.remove(d + td(1))
+
+vermelha.sort()
+
 action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
 
 if action == 'Adicionar indisponibilidades':
@@ -73,22 +90,6 @@ if action == 'Desembarque':
         efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
         st.rerun()
         
-feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
-
-vermelha, preta = [], []
-
-for d in datas:
-    if (d.weekday() in (5,6)) or (d in feriados) or (d in st.session_state.licpag.DATA.values):
-        vermelha.append(d)
-    else:
-        preta.append(d)
-
-for d in vermelha:
-    if (d + td(2) in vermelha) and (d + td(1) not in vermelha):
-        vermelha.append(d + td(1))
-        preta.remove(d + td(1))
-
-vermelha.sort()
 
 def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
