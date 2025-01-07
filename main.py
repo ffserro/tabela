@@ -19,4 +19,6 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 datas = [i.strftime('%d/%m/%Y') for i in datas]
 
-st.write(datas)
+feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)]
+
+st.write(feriados)
