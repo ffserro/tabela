@@ -8,13 +8,15 @@ import holidays
 
 st.title('TABELONA DO 💡')
 
-st.cache_resource(ttl=60)
-st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
-
-st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
-st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
-st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
-st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+@st.cache_resource(ttl=60)
+def connect():
+    st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
+    
+    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
+    st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
+    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+connect()
 
 troca = st.session_state.troca
 
