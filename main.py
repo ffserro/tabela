@@ -50,7 +50,7 @@ def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
         disp.remove(i)
-    for i in restrito[(restrito.INICIAL >= data) | (restrito.FINAL <= data)].NOME.unique():
+    for i in restrito[(restrito.INICIAL <= data) & (restrito.FINAL >= data)].NOME.unique():
         if i in disp:
             disp.remove(i)
     
