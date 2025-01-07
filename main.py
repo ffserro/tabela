@@ -101,8 +101,8 @@ def get_disponivel(data, efetivo, restrito):
             disp.remove(i)
     return disp
 
-for i in range(dt(2025, 1, 1), dt(2025, 1, 31)):
-    st.write(get_disponivel(i, efetivo, restrito))
+for i in range(1, 31):
+    st.write(get_disponivel(dt(2025, 1, i), efetivo, restrito))
     
 
 esc_preta = pd.DataFrame({'DATA':preta})
