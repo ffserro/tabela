@@ -13,6 +13,7 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA']).dt.date
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
