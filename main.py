@@ -30,7 +30,7 @@ datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
 action = st.selectbox('Qual ação você deseja executar?', ['', 'Adicionar indisponibilidades'])
 
-if action = 'Adicionar indisponibilidades':
+if action == 'Adicionar indisponibilidades':
     mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
     per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
     mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
