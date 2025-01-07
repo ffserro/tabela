@@ -17,16 +17,16 @@ st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
 
 
-troca = st.session_state.troca
+troca = st.session_state.troca.copy()
 
-licpag = st.session_state.licpag
+licpag = st.session_state.licpag.copy()
 licpag['DATA'] = pd.to_datetime(licpag['DATA'], dayfirst=True).dt.date
 
-efetivo = st.session_state.efetivo
+efetivo = st.session_state.efetivo.copy()
 efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
 efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True).dt.date
 
-restrito = st.session_state.restrito
+restrito = st.session_state.restrito.copy()
 restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
 restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
 
@@ -149,10 +149,14 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 ps.append((a, b))
         conflitos[nome] = ps
 
-st.session_state.conn.update(worksheet='EMB', data=efetivo)
-st.session_state.conn.update(worksheet='REST', data=restrito)
-st.session_state.conn.update(worksheet='TROCA', data=troca)
-st.session_state.conn.update(worksheet='LICPAG', data=licpag)
+if efetivo != st.session_state.efetivo:
+    st.session_state.conn.update(worksheet='EMB', data=efetivo)
+if restrito != st.session_state.restrito:
+    st.session_state.conn.update(worksheet='REST', data=restrito)
+if troca != st.session_state.troca:
+    st.session_state.conn.update(worksheet='TROCA', data=troca)
+if licpag != st.session_state.licpag:
+    st.session_state.conn.update(worksheet='LICPAG', data=licpag)
 
 if action == 'Troca de serviço':
     de = st.date_input('De:', dt.today())
