@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from datetime import datetime as dt
+from datetime import datetime as dt, timedelta as td
 from dateutil import tz
 
 tzinfo = tz.gettz('America/Sao_Paulo')
@@ -16,4 +16,4 @@ st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-st.write([dt(ano, 1, 1) + timedelta(i) for i in range(365)])
+st.write([dt(ano, 1, 1) + td(i) for i in range(365)])
