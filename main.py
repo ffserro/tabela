@@ -19,7 +19,10 @@ ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
-# datas = [i.strftime('%d/%m/%Y') for i in datas]
+
+if st.button('Adicionar indisponibilidade'):
+    nome = st.text_input('')
+
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
