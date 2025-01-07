@@ -36,7 +36,8 @@ for d in vermelha:
 vermelha.sort()
 
 efetivo = st.session_state.efetivo
-efetivo[['EMBARQUE', 'DESEMBARQUE']] = pd.to_datetime(efetivo[['EMBARQUE', 'DESEMBARQUE']], dayfirst=True)
+efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True)
+efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True)
 
 st.write(efetivo)
 
