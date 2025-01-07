@@ -39,7 +39,7 @@ for d in vermelha:
 vermelha.sort()
 
 for m in range(1, 13):
-    df = pd.DataFrame({'DIA':[d for d in datas if d.month() == m],
-                        'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month() == m],
-                        'NOME':['' for d in datas if d.month() == m]})
+    df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
+                        'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == m],
+                        'NOME':['' for d in datas if d.month == m]})
     st.session_state[meses[i]] = st.session_state.conn.update(worksheet=meses[i], data=df)
