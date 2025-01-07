@@ -40,8 +40,8 @@ st.write(st.session_state.efetivo)
 esc_preta = {}
 esc_vermelha = {}
 
-for m in range(1, 13):
-    df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
-                        'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == m],
-                        'NOME':['' for d in datas if d.month == m]})
-    st.session_state[meses[m]] = st.session_state.conn.update(worksheet=meses[m], data=df)
+# for m in range(1, 13):
+#     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
+#                         'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == m],
+#                         'NOME':['' for d in datas if d.month == m]})
+#     st.session_state[meses[m]] = st.session_state.conn.update(worksheet=meses[m], data=df)
