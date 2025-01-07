@@ -128,8 +128,9 @@ st.write(conflitos)
 for nome in conflitos:
     ps = []
     for i in range(len(conflitos[nome])-1):
-        if conflitos[nome][i+1] - conflitos[nome][i] <= td(2):
-            ps.append((conflitos[nome][i], conflitos[nome][i+i]))
+        a, b = conflitos[nome][i], conflitos[nome][i + 1]
+        if b - a <= td(2):
+            ps.append((a, b))
     conflitos[nome] = ps
         
 
