@@ -14,6 +14,7 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
 
 licpag = st.session_state.licpag
 licpag['DATA'] = pd.to_datetime(licpag['DATA'], dayfirst=True).dt.date
@@ -41,6 +42,7 @@ if action == 'Adicionar indisponibilidades':
     send_ind = st.button('Enviar')
     if send_ind and mil_ind != '-':
         restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
+        restrito = restrito.sort_values(by='INICIAL')
         st.session_state.conn.update(worksheet='REST', data=restrito)
 
 if action == 'Alterar data da LicPag':
@@ -113,14 +115,7 @@ for d in esc_vermelha.index[1:]:
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
-if action == 'Troca de serviço':
-    de = st.date_input('De:', dt.today())
-    para = st.date_input('Para:', dt.today())
-    motivo_troca = st.text_input('Motivo da troca:')
-
 st.write(geral_corrida)
-st.write(esc_vermelha)
-st.write(esc_preta)
 
 conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
 st.write(conflitos)
@@ -132,9 +127,34 @@ for nome in conflitos:
         if b - a <= td(2):
             ps.append((a, b))
     conflitos[nome] = ps
-        
 
+for nome in conflitos:
+    for conflito in conflitos[nome]:
+        ver = conflito[0] if conflito[0] in vermelha else conflito[1]
+        pre = conflito[1] if conflito[1] in preta else conflito[0]
+
+        if pre < ver:
+            geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
+        else:
+            geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 2]] = geral_corrida.loc[preta[preta.index(pre) + 2]], geral_corrida.loc[pre]
+    
+conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
 st.write(conflitos)
+
+for nome in conflitos:
+    ps = []
+    for i in range(len(conflitos[nome])-1):
+        a, b = conflitos[nome][i], conflitos[nome][i + 1]
+        if b - a <= td(2):
+            ps.append((a, b))
+    conflitos[nome] = ps
+    
+st.write(conflitos)
+
+if action == 'Troca de serviço':
+    de = st.date_input('De:', dt.today())
+    para = st.date_input('Para:', dt.today())
+    motivo_troca = st.text_input('Motivo da troca:')
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
