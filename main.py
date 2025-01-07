@@ -12,6 +12,7 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 # EFETIVO DOS QUE CONCORREM A ESCALA
 st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
+st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
@@ -24,7 +25,7 @@ feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [
 vermelha, preta = [], []
 
 for d in datas:
-    if (d.weekday() in (5,6)) or (d in feriados):
+    if (d.weekday() in (5,6)) or (d in feriados) or (d in st.session_state.licpag.data):
         vermelha.append(d)
     else:
         preta.append(d)
@@ -72,7 +73,7 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 #     esc = get_disponivel(d, efetivo, restrito)
 #     esc_preta[d] = esc[esc.index(esc_preta[d-td(1)]) - 1]
 
-st.write(esc_vermelha)
+st.write(esc_preta)
 
 # for m in range(1, 13):
 #     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
