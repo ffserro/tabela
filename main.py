@@ -9,23 +9,35 @@ import holidays
 st.title('TABELONA DO 💡')
 
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
-st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
-st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
-st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
-st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
 
 
-troca = st.session_state.troca
+def troca_update():
+    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+    return st.session_state.troca
 
-licpag = st.session_state.licpag
-licpag['DATA'] = pd.to_datetime(licpag['DATA'], dayfirst=True).dt.date
+def licpag_update():
+    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+    st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
+    return st.session_state.licpag
 
-efetivo = st.session_state.efetivo
-efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
-efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True).dt.date
+def efetivo_update():
+    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
+    st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
+    st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
+    return st.session_state.efetivo
 
-st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
-st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
+def restrito_update():
+    st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
+    st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
+    st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
+    return st.session_state.restrito
+
+if 'instanciado' not in st.session_state:
+    troca_update()
+    licpag_update()
+    efetivo_update()
+    restrito_update()
+    st.session_state['instanciado'] = True
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
@@ -142,6 +154,7 @@ if action == 'Adicionar indisponibilidades':
         mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
         send_ind = st.form_submit_button('Enviar')
         if send_ind and mil_ind != '-':
+            restrito_update()
             st.session_state.restrito = pd.concat([st.session_state.restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
             st.session_state.restrito = st.session_state.restrito.sort_values(by='INICIAL')
             st.session_state.conn.update(worksheet='REST', data=st.session_state.restrito)
