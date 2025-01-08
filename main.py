@@ -119,15 +119,16 @@ if not troca.drop_duplicates().equals(st.session_state.troca):
 action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
 
 if action == 'Adicionar indisponibilidades':
-    mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
-    per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
-    send_ind = st.button('Enviar')
-    if send_ind and mil_ind != '-':
-        restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
-        restrito = restrito.sort_values(by='INICIAL')
-        st.session_state.conn.update(worksheet='REST', data=restrito)
-        st.rerun()
+    with st.form('INDISPONIBILIDADE', clear_on_submit=True):
+        mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
+        per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
+        mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
+        send_ind = st.form_submit_button('Enviar')
+        if send_ind and mil_ind != '-':
+            restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
+            restrito = restrito.sort_values(by='INICIAL')
+            st.session_state.conn.update(worksheet='REST', data=restrito)
+            st.rerun()
 
 if action == 'Alterar data da LicPag':
     mes_alt = st.selectbox('Mês da alteração:', meses)
