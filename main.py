@@ -73,9 +73,6 @@ for d in esc_preta.index[1:]:
     hoje = get_disponivel(d, efetivo, st.session_state.restrito)
     hoje = hoje + [hoje[0]]
     passa = esc_preta.loc[preta[preta.index(d) - 1]][0]
-
-    st.write(hoje)
-    st.write(passa)
     if passa in hoje:
         esc_preta.loc[d, 'NOME'] = hoje[hoje.index(passa) + 1]
     else:
