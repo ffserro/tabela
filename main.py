@@ -69,13 +69,23 @@ esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
 for d in esc_preta.index[1:]:
-    esc = get_disponivel(d, efetivo, st.session_state.restrito)
-    esc = esc + [esc[0]]
-    esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1]
+    ontem = get_disponivel(d - td(1), efetivo, st.session_state.restrito)
+    hoje = get_disponivel(d, efetivo, st.session_state.restrito)
+    hoje = hoje + [hoje[0]]
+    passa = esc_preta.loc[preta[preta.index(d) - 1]]
+    if passa in hoje:
+        esc_preta.loc[d, 'NOME'] = hoje[hoje.index(passa) + 1]
+    else:
+        esc_preta.loc[d, 'NOME'] = hoje[ontem.index(passa)]
 
 for d in esc_vermelha.index[1:]:
-    esc = get_disponivel(d, efetivo, st.session_state.restrito)
-    esc_vermelha.loc[d, 'NOME'] = esc[esc.index(esc_vermelha.loc[vermelha[vermelha.index(d) - 1], 'NOME']) - 1]
+    ontem = get_disponivel(d - td(1), efetivo, st.session_state.restrito)
+    hoje = get_disponivel(d, efetivo, st.session_state.restrito)
+    passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]]
+    if passa in hoje:
+        esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
+    else:
+        esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) -1]
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
