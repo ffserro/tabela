@@ -89,6 +89,8 @@ for d in esc_vermelha.index[1:]:
             esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
         except:
             st.write(esc_vermelha.dropna().tail())
+            st.write('hoje', d)
+            st.write('ontem', d - td(1))
             st.write(ontem)
             st.write(hoje)
             st.write(passa)
