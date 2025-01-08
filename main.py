@@ -28,8 +28,6 @@ restrito = st.session_state.restrito.copy()
 restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
 restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
 
-st.write(licpag)
-
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
