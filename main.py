@@ -15,18 +15,17 @@ st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
 
 
-troca = st.session_state.troca.copy()
+troca = st.session_state.troca
 
-licpag = st.session_state.licpag.copy()
+licpag = st.session_state.licpag
 licpag['DATA'] = pd.to_datetime(licpag['DATA'], dayfirst=True).dt.date
 
-efetivo = st.session_state.efetivo.copy()
+efetivo = st.session_state.efetivo
 efetivo['EMBARQUE'] = pd.to_datetime(efetivo['EMBARQUE'], dayfirst=True).dt.date
 efetivo['DESEMBARQUE'] = pd.to_datetime(efetivo['DESEMBARQUE'], dayfirst=True).dt.date
 
-restrito = st.session_state.restrito.copy()
-restrito['INICIAL'] = pd.to_datetime(restrito['INICIAL'], dayfirst=True).dt.date
-restrito['FINAL'] = pd.to_datetime(restrito['FINAL'], dayfirst=True).dt.date
+st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
+st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
