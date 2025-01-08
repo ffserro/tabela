@@ -138,7 +138,7 @@ if not troca.drop_duplicates().equals(st.session_state.troca):
     st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
 
 
-if action == 'Troca de serviço':
+if st.button('Realizar troca de serviço'):
     de = st.date_input('De:', dt.today())
     para = st.date_input('Para:', dt.today())
     motivo_troca = st.text_input('Motivo da troca:')
