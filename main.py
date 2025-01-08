@@ -36,7 +36,6 @@ feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [
 
 vermelha, preta = [], []
 
-licpag = licpag_update()
 for d in datas:
     if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values):
         vermelha.append(d)
