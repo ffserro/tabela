@@ -50,6 +50,9 @@ for d in vermelha:
 
 vermelha.sort()        
 
+st.write(preta)
+st.write(vermelha)
+
 def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
