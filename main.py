@@ -32,11 +32,6 @@ def restrito_update():
     st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
     return st.session_state.restrito
 
-if 'instanciado' not in st.session_state:
-    troca = troca_update()
-    restrito = restrito_update()
-    st.session_state['instanciado'] = True
-
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
@@ -121,6 +116,7 @@ for nome in conflitos:
             ps.append((a, b))
     conflitos[nome] = ps
 
+troca = troca_update()
 while any(len(conflitos[nome]) > 0 for nome in conflitos):
     for nome in conflitos:
         for conflito in conflitos[nome]:
