@@ -85,7 +85,13 @@ for d in esc_vermelha.index[1:]:
     if passa in hoje:
         esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
     else:
-        esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) -1]
+        try:
+            esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
+        except:
+            st.write(esc_vermelha.tail())
+            st.write(ontem)
+            st.write(hoje)
+            st.write(passa)
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
