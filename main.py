@@ -68,9 +68,6 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
-efetivo = efetivo_update()
-restrito = restrito_update()
-
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
