@@ -10,27 +10,22 @@ st.title('TABELONA DO 💡')
 
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
+st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+troca = st.session_state.troca
 
-def troca_update():
-    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
-    return st.session_state.troca
+st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
+licpag = st.session_state.licpag
 
-def licpag_update():
-    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
-    st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
-    return st.session_state.licpag
+st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
+st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
+st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
+efetivo = st.session_state.efetivo
 
-def efetivo_update():
-    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
-    st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
-    st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
-    return st.session_state.efetivo
-
-def restrito_update():
-    st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
-    st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
-    st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
-    return st.session_state.restrito
+st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
+st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
+st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
+restrito = st.session_state.restrito
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
@@ -116,7 +111,6 @@ for nome in conflitos:
             ps.append((a, b))
     conflitos[nome] = ps
 
-troca = troca_update()
 while any(len(conflitos[nome]) > 0 for nome in conflitos):
     for nome in conflitos:
         for conflito in conflitos[nome]:
@@ -143,52 +137,6 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
 if not troca.drop_duplicates().equals(st.session_state.troca):
     st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
 
-action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
-
-if action == 'Adicionar indisponibilidades':
-    with st.form('INDISPONIBILIDADE'):
-        mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
-        per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-        mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
-        send_ind = st.form_submit_button('Enviar')
-        if send_ind and mil_ind != '-':
-            restrito = restrito_update()
-            # restrito = pd.concat([pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]}), restrito])
-            restrito.loc[len(restrito)] = [mil_ind, per_ind[0], per_ind[1], mot_ind]
-            # restrito = restrito.sort_values(by='INICIAL')
-            st.session_state.conn.update(worksheet='REST', data=restrito)
-            st.cache_data.clear()
-            st.rerun()
-
-
-if action == 'Alterar data da LicPag':
-    mes_alt = st.selectbox('Mês da alteração:', meses)
-    if mes_alt != '-':
-        data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), monthrange(ano, meses.index(mes_alt))[-1]), format='DD/MM/YYYY')
-        send_alt = st.button('Enviar')
-        if send_alt and mes_alt:
-            licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
-            st.session_state.conn.update(worksheet='LICPAG', data=licpag)
-            st.rerun()
-            
-
-if action == 'Embarque':
-    nome_emb = st.text_input('Nome do embarcado:')
-    comimsup_emb = st.selectbox('Quem é o ComImSup do velha guarda?', list(efetivo.NOME))
-    data_emb = st.date_input('Data do embarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
-    if st.button('Enviar'):
-        efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
-        st.session_state.conn.update(worksheet='EMB', data=efetivo)
-        st.rerun()
-    
-if action == 'Desembarque':
-    nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
-    data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    if st.button('Enviar'):
-        efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
-        st.session_state.conn.update(worksheet='EMB', data=efetivo)
-        st.rerun()  
 
 if action == 'Troca de serviço':
     de = st.date_input('De:', dt.today())
@@ -207,8 +155,3 @@ if st.button('Gerar!') and gera_mes != 0:
     df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[d][0] for d in datas if d.month == gera_mes]})
     st.write(df)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
-# for m in range(1, 13):
-#     df = pd.DataFrame({'DIA':[d for d in datas if d.month == m],
-#                         'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == m],
-#                         'NOME':['' for d in datas if d.month == m]})
-#     st.session_state[meses[m]] = st.session_state.conn.update(worksheet=meses[m], data=df)
