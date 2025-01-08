@@ -151,7 +151,7 @@ if action == 'Desembarque':
         efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
         st.rerun()
 
-st.write(efetivo.compare(st.session_state.efetivo))
+st.write(efetivo.equals(st.session_state.efetivo))
 
 # if efetivo != st.session_state.efetivo:
 #     st.session_state.conn.update(worksheet='EMB', data=efetivo)
