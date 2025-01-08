@@ -33,10 +33,10 @@ def restrito_update():
     return st.session_state.restrito
 
 if 'instanciado' not in st.session_state:
-    troca_update()
-    licpag_update()
-    efetivo_update()
-    restrito_update()
+    troca = troca_update()
+    licpag = licpag_update()
+    efetivo = efetivo_update()
+    restrito = restrito_update()
     st.session_state['instanciado'] = True
 
 ano = 2025
@@ -81,8 +81,8 @@ esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
 for d in esc_preta.index[1:]:
-    ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, st.session_state.restrito)
-    hoje = get_disponivel(d, efetivo, st.session_state.restrito)
+    ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
+    hoje = get_disponivel(d, efetivo, restrito)
     hoje = hoje + [hoje[0]]
     passa = esc_preta.loc[preta[preta.index(d) - 1]][0]
     if passa in hoje:
@@ -91,8 +91,8 @@ for d in esc_preta.index[1:]:
         esc_preta.loc[d, 'NOME'] = hoje[ontem.index(passa)]
 
 for d in esc_vermelha.index[1:]:
-    ontem = get_disponivel(vermelha[vermelha.index(d) - 1], efetivo, st.session_state.restrito)
-    hoje = get_disponivel(d, efetivo, st.session_state.restrito)
+    ontem = get_disponivel(vermelha[vermelha.index(d) - 1], efetivo, restrito)
+    hoje = get_disponivel(d, efetivo, restrito)
     passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]][0]
     if passa in hoje:
         esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
@@ -154,10 +154,10 @@ if action == 'Adicionar indisponibilidades':
         mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
         send_ind = st.form_submit_button('Enviar')
         if send_ind and mil_ind != '-':
-            restrito_update()
-            st.session_state.restrito = pd.concat([st.session_state.restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
-            st.session_state.restrito = st.session_state.restrito.sort_values(by='INICIAL')
-            st.session_state.conn.update(worksheet='REST', data=st.session_state.restrito)
+            restrito = restrito_update()
+            restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
+            restrito = restrito.sort_values(by='INICIAL')
+            st.session_state.conn.update(worksheet='REST', data=restrito)
 
 
 if action == 'Alterar data da LicPag':
