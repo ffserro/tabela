@@ -157,6 +157,8 @@ if action == 'Adicionar indisponibilidades':
             restrito.loc[len(restrito)] = [mil_ind, per_ind[0], per_ind[1], mot_ind]
             # restrito = restrito.sort_values(by='INICIAL')
             st.session_state.conn.update(worksheet='REST', data=restrito)
+            st.cache_data.clear()
+            st.rerun()
 
 
 if action == 'Alterar data da LicPag':
