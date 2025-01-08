@@ -50,6 +50,7 @@ for d in vermelha:
 
 vermelha.sort()        
 
+st.write(licpag.DATA.values)
 st.write(preta)
 st.write(vermelha)
 
