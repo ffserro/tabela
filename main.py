@@ -124,7 +124,7 @@ if action == 'Adicionar indisponibilidades':
     mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
     send_ind = st.button('Enviar')
     if send_ind and mil_ind != '-':
-        st.session_state.restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
+        st.session_state.restrito = pd.concat([st.session_state.restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
         st.session_state.restrito = st.session_state.restrito.sort_values(by='INICIAL')
         st.session_state.conn.update(worksheet='REST', data=st.session_state.restrito)
 
