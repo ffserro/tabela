@@ -70,6 +70,10 @@ esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
 for d in esc_preta.index[1:]:
+    st.write(d)
+    st.write(efetivo)
+    st.write(restrito)
+    st.write(get_disponivel(d, efetivo, restrito))
     esc = get_disponivel(d, efetivo, restrito)
     esc = esc + [esc[0]]
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1]
