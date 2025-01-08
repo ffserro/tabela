@@ -69,12 +69,12 @@ esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
 for d in esc_preta.index[1:]:
-    esc = get_disponivel(d, efetivo, restrito)
+    esc = get_disponivel(d, efetivo, st.session_state.restrito)
     esc = esc + [esc[0]]
     esc_preta.loc[d, 'NOME'] = esc[esc.index(esc_preta.loc[preta[preta.index(d) - 1], 'NOME']) + 1]
 
 for d in esc_vermelha.index[1:]:
-    esc = get_disponivel(d, efetivo, restrito)
+    esc = get_disponivel(d, efetivo, st.session_state.restrito)
     esc_vermelha.loc[d, 'NOME'] = esc[esc.index(esc_vermelha.loc[vermelha[vermelha.index(d) - 1], 'NOME']) - 1]
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
