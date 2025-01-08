@@ -151,14 +151,16 @@ if action == 'Desembarque':
         efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
         st.rerun()
 
-if efetivo != st.session_state.efetivo:
-    st.session_state.conn.update(worksheet='EMB', data=efetivo)
-if restrito != st.session_state.restrito:
-    st.session_state.conn.update(worksheet='REST', data=restrito)
-if troca != st.session_state.troca:
-    st.session_state.conn.update(worksheet='TROCA', data=troca)
-if licpag != st.session_state.licpag:
-    st.session_state.conn.update(worksheet='LICPAG', data=licpag)
+st.write(efetivo.compare(st.session_state.efetivo))
+
+# if efetivo != st.session_state.efetivo:
+#     st.session_state.conn.update(worksheet='EMB', data=efetivo)
+# if restrito != st.session_state.restrito:
+#     st.session_state.conn.update(worksheet='REST', data=restrito)
+# if troca != st.session_state.troca:
+#     st.session_state.conn.update(worksheet='TROCA', data=troca)
+# if licpag != st.session_state.licpag:
+#     st.session_state.conn.update(worksheet='LICPAG', data=licpag)
 
 if action == 'Troca de serviço':
     de = st.date_input('De:', dt.today())
