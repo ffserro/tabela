@@ -34,7 +34,6 @@ def restrito_update():
 
 if 'instanciado' not in st.session_state:
     troca = troca_update()
-    efetivo = efetivo_update()
     restrito = restrito_update()
     st.session_state['instanciado'] = True
 
@@ -81,6 +80,7 @@ esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
 efetivo = efetivo_update()
+restrito = restrito_update()
 
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
