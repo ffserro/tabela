@@ -48,46 +48,7 @@ for d in vermelha:
         vermelha.append(d + td(1))
         preta.remove(d + td(1))
 
-vermelha.sort()
-
-action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
-
-if action == 'Adicionar indisponibilidades':
-    mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
-    per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
-    send_ind = st.button('Enviar')
-    if send_ind and mil_ind != '-':
-        restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
-        restrito = restrito.sort_values(by='INICIAL')
-        st.rerun()
-
-if action == 'Alterar data da LicPag':
-    mes_alt = st.selectbox('Mês da alteração:', meses)
-    if mes_alt != '-':
-        data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), monthrange(ano, meses.index(mes_alt))[-1]), format='DD/MM/YYYY')
-        send_alt = st.button('Enviar')
-        if send_alt and mes_alt:
-            licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
-            st.rerun()
-            
-
-if action == 'Embarque':
-    nome_emb = st.text_input('Nome do embarcado:')
-    comimsup_emb = st.selectbox('Quem é o ComImSup do velha guarda?', list(efetivo.NOME))
-    data_emb = st.date_input('Data do embarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
-    if st.button('Enviar'):
-        efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
-        st.rerun()
-    
-if action == 'Desembarque':
-    nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
-    data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
-    if st.button('Enviar'):
-        efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
-        st.rerun()
-        
+vermelha.sort()        
 
 def get_disponivel(data, efetivo, restrito):
     disp = list(efetivo.NOME.values)
@@ -151,6 +112,44 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
             if b - a <= td(2):
                 ps.append((a, b))
         conflitos[nome] = ps
+
+action = st.selectbox('Qual ação você deseja executar?', ['', 'Troca de serviço', 'Adicionar indisponibilidades', 'Alterar data da LicPag', 'Embarque', 'Desembarque'])
+
+if action == 'Adicionar indisponibilidades':
+    mil_ind = st.selectbox('Militar com indisponibilidade:', ['-'] + list(efetivo.NOME.values))
+    per_ind = st.date_input('Período:', [dt.today(), dt.today()], min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
+    mot_ind = st.selectbox('Motivo:', options=['Férias', 'Dispensa médica', 'Destaque', 'Viagem', 'Luto', 'Desembarque', 'Paternidade', 'Qualificando'])
+    send_ind = st.button('Enviar')
+    if send_ind and mil_ind != '-':
+        restrito = pd.concat([restrito, pd.DataFrame({'NOME':[mil_ind], 'INICIAL':[per_ind[0]], 'FINAL':[per_ind[1]], 'MOTIVO':[mot_ind]})])
+        restrito = restrito.sort_values(by='INICIAL')
+        st.rerun()
+
+if action == 'Alterar data da LicPag':
+    mes_alt = st.selectbox('Mês da alteração:', meses)
+    if mes_alt != '-':
+        data_alt = st.date_input('Data da LicPag:', min_value=dt(ano, meses.index(mes_alt), 1), max_value=dt(ano, meses.index(mes_alt), monthrange(ano, meses.index(mes_alt))[-1]), format='DD/MM/YYYY')
+        send_alt = st.button('Enviar')
+        if send_alt and mes_alt:
+            licpag.loc[licpag.MES==mes_alt, 'DATA'] = data_alt
+            st.rerun()
+            
+
+if action == 'Embarque':
+    nome_emb = st.text_input('Nome do embarcado:')
+    comimsup_emb = st.selectbox('Quem é o ComImSup do velha guarda?', list(efetivo.NOME))
+    data_emb = st.date_input('Data do embarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
+    emb_ind = efetivo[efetivo.NOME==comimsup_emb].index + 1
+    if st.button('Enviar'):
+        efetivo = pd.concat([efetivo.iloc[:emb_ind], pd.DataFrame({'NOME':[nome_emb], 'EMBARQUE':[data_emb], 'DESEMBARQUE':[dt(ano+1, 1, 1)]})])
+        st.rerun()
+    
+if action == 'Desembarque':
+    nome_dbq = st.selectbox('Quem desembarca?', ['-'] + list(efetivo.NOME))
+    data_dbq = st.date_input('Data do desembarque:', dt.today(), min_value=dt(ano, 1, 1), max_value=dt(ano, 12, 1), format='DD/MM/YYYY')
+    if st.button('Enviar'):
+        efetivo.loc[efetivo.NOME==nome_dbq, 'DESEMBARQUE'] = data_dbq
+        st.rerun()
 
 if efetivo != st.session_state.efetivo:
     st.session_state.conn.update(worksheet='EMB', data=efetivo)
