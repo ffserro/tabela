@@ -13,16 +13,16 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=600)
 troca = st.session_state.troca
 
-st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG'), ttl=600
+st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG', ttl=600)
 st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
 licpag = st.session_state.licpag
 
-st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB'), ttl=600
+st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB', ttl=600)
 st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
 st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
 efetivo = st.session_state.efetivo
 
-st.session_state.restrito = st.session_state.conn.read(worksheet='REST'), ttl=600
+st.session_state.restrito = st.session_state.conn.read(worksheet='REST', ttl=600)
 st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
 st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
 restrito = st.session_state.restrito
