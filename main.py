@@ -72,7 +72,7 @@ for d in esc_preta.index[1:]:
     ontem = get_disponivel(d - td(1), efetivo, st.session_state.restrito)
     hoje = get_disponivel(d, efetivo, st.session_state.restrito)
     hoje = hoje + [hoje[0]]
-    passa = esc_preta.loc[preta[preta.index(d) - 1]]
+    passa = esc_preta.loc[preta[preta.index(d) - 1]][0]
 
     st.write(hoje)
     st.write(passa)
@@ -84,7 +84,7 @@ for d in esc_preta.index[1:]:
 for d in esc_vermelha.index[1:]:
     ontem = get_disponivel(d - td(1), efetivo, st.session_state.restrito)
     hoje = get_disponivel(d, efetivo, st.session_state.restrito)
-    passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]]
+    passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]][0]
     if passa in hoje:
         esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
     else:
