@@ -116,13 +116,13 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
             pre = conflito[1] if conflito[1] in preta else conflito[0]
     
             if pre < ver:
-                if len(troca.loc[troca.DE==pre, troca.PARA==preta[preta.index(pre) - 1]]) != 0:
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) - 1]).values):
                     infinite_loop = True
                     break
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 1]] = geral_corrida.loc[preta[preta.index(pre) - 1]], geral_corrida.loc[pre]
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 1]], 'MOTIVO':['AUTOMÁTICA']})])
             else:
-                if len(troca.loc[troca.DE==pre, troca.PARA==preta[preta.index(pre) + 1]]) != 0:
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 1]).values):
                     infinite_loop = True
                     break
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 1]] = geral_corrida.loc[preta[preta.index(pre) + 1]], geral_corrida.loc[pre]
