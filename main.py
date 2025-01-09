@@ -10,23 +10,27 @@ st.title('TABELONA DO 💡')
 
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
-st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
-st.session_state.troca = st.session_state.troca[st.session_state.troca.MOTIVO != 'AUTOMÁTICA']
-troca = st.session_state.troca
+def troca_update():
+    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+    st.session_state.troca = st.session_state.troca[st.session_state.troca.MOTIVO != 'AUTOMÁTICA']
+    return st.session_state.troca
 
-st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
-st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
-licpag = st.session_state.licpag
+def licpag_update():
+    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+    st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
+    return st.session_state.licpag
 
-st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
-st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
-st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
-efetivo = st.session_state.efetivo
+def efetivo_update():
+    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
+    st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
+    st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
+    return st.session_state.efetivo
 
-st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
-st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
-st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
-restrito = st.session_state.restrito
+def restrito_update():
+    st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
+    st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
+    st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
+    return st.session_state.restrito
 
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
@@ -37,6 +41,7 @@ feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [
 
 vermelha, preta = [], []
 
+licpag = licpag_update()
 for d in datas:
     if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values):
         vermelha.append(d)
@@ -69,6 +74,8 @@ esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondi
 esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
 
+restrito = restrito_update()
+efetivo = efetivo_update()
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
@@ -108,6 +115,7 @@ for nome in conflitos:
             ps.append((a, b))
     conflitos[nome] = ps
 
+troca = troca_update()
 while any(len(conflitos[nome]) > 0 for nome in conflitos):
     infinite_loop = False
     for nome in conflitos:
