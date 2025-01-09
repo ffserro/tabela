@@ -117,24 +117,24 @@ for nome in conflitos:
 
 troca = troca_update()
 while any(len(conflitos[nome]) > 0 for nome in conflitos):
-    infinite_loop = False
+    ignored = []
     for nome in conflitos:
         for conflito in conflitos[nome]:
             ver = conflito[0] if conflito[0] in vermelha else conflito[1]
             pre = conflito[1] if conflito[1] in preta else conflito[0]
     
             if pre < ver:
-                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) - 2]).values):
-                    infinite_loop = True
-                    st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) - 2].strftime('%d/%m')}')
-                    break
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) - 2]).values) or (pre, preta[preta.index(pre) - 2]) in ignored:
+                    ignored.append((pre, preta[preta.index(pre) - 2]))
+                    # st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) - 2].strftime('%d/%m')}')
+                    continue
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
             else:
-                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values):
-                    infinite_loop = True
-                    st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) + 2].strftime('%d/%m')}')
-                    break
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
+                    ignored.append((pre, preta[preta.index(pre) + 2]))
+                    # st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) + 2].strftime('%d/%m')}')
+                    continue
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 2]] = geral_corrida.loc[preta[preta.index(pre) + 2]], geral_corrida.loc[pre]
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 2]], 'MOTIVO':['AUTOMÁTICA']})])
 
@@ -148,7 +148,9 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 ps.append((a, b))
         conflitos[nome] = ps
     
-    if infinite_loop:
+    if len(set(ignored)) == sum([len(conflitos[nome] for nome in conflitos)]):
+        for a, b in set(ignored):
+            st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
         break
 
 st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
