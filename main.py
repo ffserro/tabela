@@ -11,23 +11,23 @@ st.title('TABELONA DO 💡')
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 def troca_update():
-    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=60)
+    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=600)
     st.session_state.troca = st.session_state.troca[st.session_state.troca.MOTIVO != 'AUTOMÁTICA']
     return st.session_state.troca
 
 def licpag_update():
-    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG', ttl=60)
+    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG', ttl=600)
     st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
     return st.session_state.licpag
 
 def efetivo_update():
-    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB', ttl=60)
+    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB', ttl=600)
     st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
     st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
     return st.session_state.efetivo
 
 def restrito_update():
-    st.session_state.restrito = st.session_state.conn.read(worksheet='REST', ttl=60)
+    st.session_state.restrito = st.session_state.conn.read(worksheet='REST', ttl=600)
     st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
     st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
     return st.session_state.restrito
@@ -131,7 +131,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
             else:
-                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored or pre >= date(ano, 12, 29):
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored or pre >= dt(ano, 12, 29):
                     ignored.append((pre, preta[preta.index(pre) + 2]))
                     # st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) + 2].strftime('%d/%m')}')
                     continue
