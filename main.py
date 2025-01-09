@@ -10,19 +10,20 @@ st.title('TABELONA DO 💡')
 
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
-st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=600)
+st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+troca = troca[troca.MOTIVO != 'AUTOMÁTICA']
 troca = st.session_state.troca
 
-st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG', ttl=600)
+st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
 licpag = st.session_state.licpag
 
-st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB', ttl=600)
+st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
 st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
 st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
 efetivo = st.session_state.efetivo
 
-st.session_state.restrito = st.session_state.conn.read(worksheet='REST', ttl=600)
+st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
 st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
 st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
 restrito = st.session_state.restrito
@@ -107,28 +108,36 @@ for nome in conflitos:
             ps.append((a, b))
     conflitos[nome] = ps
 
-# while any(len(conflitos[nome]) > 0 for nome in conflitos):
-#     for nome in conflitos:
-#         for conflito in conflitos[nome]:
-#             ver = conflito[0] if conflito[0] in vermelha else conflito[1]
-#             pre = conflito[1] if conflito[1] in preta else conflito[0]
+while any(len(conflitos[nome]) > 0 for nome in conflitos):
+    infinite_loop = False
+    for nome in conflitos:
+        for conflito in conflitos[nome]:
+            ver = conflito[0] if conflito[0] in vermelha else conflito[1]
+            pre = conflito[1] if conflito[1] in preta else conflito[0]
     
-#             if pre < ver:
-#                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 1]] = geral_corrida.loc[preta[preta.index(pre) - 1]], geral_corrida.loc[pre]
-#                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 1]], 'MOTIVO':['AUTOMÁTICA']})])
-#             else:
-#                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 1]] = geral_corrida.loc[preta[preta.index(pre) + 1]], geral_corrida.loc[pre]
-#                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 1]], 'MOTIVO':['AUTOMÁTICA']})])
+            if pre < ver:
+                if len(troca.loc[troca.DE==pre, troca.PARA==preta[preta.index(pre) - 1]]) != 0:
+                    infinite_loop = True
+                    break
+                geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 1]] = geral_corrida.loc[preta[preta.index(pre) - 1]], geral_corrida.loc[pre]
+                troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 1]], 'MOTIVO':['AUTOMÁTICA']})])
+            else:
+                if len(troca.loc[troca.DE==pre, troca.PARA==preta[preta.index(pre) + 1]]) != 0:
+                    infinite_loop = True
+                    break
+                geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 1]] = geral_corrida.loc[preta[preta.index(pre) + 1]], geral_corrida.loc[pre]
+                troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 1]], 'MOTIVO':['AUTOMÁTICA']})])
+    if infinite_loop:
+        break
+    conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
     
-#     conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
-    
-#     for nome in conflitos:
-#         ps = []
-#         for i in range(len(conflitos[nome])-1):
-#             a, b = conflitos[nome][i], conflitos[nome][i + 1]
-#             if b - a <= td(2):
-#                 ps.append((a, b))
-#         conflitos[nome] = ps
+    for nome in conflitos:
+        ps = []
+        for i in range(len(conflitos[nome])-1):
+            a, b = conflitos[nome][i], conflitos[nome][i + 1]
+            if b - a <= td(2):
+                ps.append((a, b))
+        conflitos[nome] = ps
 
 if not troca.drop_duplicates().equals(st.session_state.troca):
     st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
