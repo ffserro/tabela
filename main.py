@@ -127,8 +127,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                     break
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 1]] = geral_corrida.loc[preta[preta.index(pre) + 1]], geral_corrida.loc[pre]
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 1]], 'MOTIVO':['AUTOMÁTICA']})])
-    if infinite_loop:
-        break
+
     conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
     
     for nome in conflitos:
@@ -138,9 +137,11 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
             if b - a <= td(2):
                 ps.append((a, b))
         conflitos[nome] = ps
+    
+    if infinite_loop:
+        break
 
-if not troca.drop_duplicates().equals(st.session_state.troca):
-    st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
+st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
 
 
 if st.button('Realizar troca de serviço'):
