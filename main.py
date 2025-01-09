@@ -11,8 +11,8 @@ st.title('TABELONA DO 💡')
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
-troca = troca[troca.MOTIVO != 'AUTOMÁTICA']
 troca = st.session_state.troca
+troca = troca[troca.MOTIVO != 'AUTOMÁTICA']
 
 st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
 st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
