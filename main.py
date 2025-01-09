@@ -124,14 +124,14 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
             pre = conflito[1] if conflito[1] in preta else conflito[0]
     
             if pre < ver:
-                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) - 2]).values) or (pre, preta[preta.index(pre) - 2]) in ignored:
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) - 2]).values) or (pre, preta[preta.index(pre) - 2]) in ignored or preta[preta.index(pre) -2] not in preta:
                     ignored.append((pre, preta[preta.index(pre) - 2]))
                     # st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) - 2].strftime('%d/%m')}')
                     continue
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
             else:
-                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
+                if any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored or preta[preta.index(pre) + 2] not in preta:
                     ignored.append((pre, preta[preta.index(pre) + 2]))
                     # st.write(f'Houve conflito nas trocas automáticas entre os dias {pre.strftime('%d/%m')} e {preta[preta.index(pre) + 2].strftime('%d/%m')}')
                     continue
