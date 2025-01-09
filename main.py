@@ -79,7 +79,7 @@ efetivo = efetivo_update()
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
-    hoje = hoje + [hoje[0]]
+    hoje = hoje + hoje
     passa = esc_preta.loc[preta[preta.index(d) - 1]][0]
     if passa in hoje:
         esc_preta.loc[d, 'NOME'] = hoje[hoje.index(passa) + 1]
