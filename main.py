@@ -11,23 +11,23 @@ st.title('TABELONA DO 💡')
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 def troca_update():
-    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA')
+    st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=60)
     st.session_state.troca = st.session_state.troca[st.session_state.troca.MOTIVO != 'AUTOMÁTICA']
     return st.session_state.troca
 
 def licpag_update():
-    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG')
+    st.session_state.licpag = st.session_state.conn.read(worksheet='LICPAG', ttl=60)
     st.session_state.licpag['DATA'] = pd.to_datetime(st.session_state.licpag['DATA'], dayfirst=True).dt.date
     return st.session_state.licpag
 
 def efetivo_update():
-    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB')
+    st.session_state.efetivo = st.session_state.conn.read(worksheet='EMB', ttl=60)
     st.session_state.efetivo['EMBARQUE'] = pd.to_datetime(st.session_state.efetivo['EMBARQUE'], dayfirst=True).dt.date
     st.session_state.efetivo['DESEMBARQUE'] = pd.to_datetime(st.session_state.efetivo['DESEMBARQUE'], dayfirst=True).dt.date
     return st.session_state.efetivo
 
 def restrito_update():
-    st.session_state.restrito = st.session_state.conn.read(worksheet='REST')
+    st.session_state.restrito = st.session_state.conn.read(worksheet='REST', ttl=60)
     st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
     st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
     return st.session_state.restrito
