@@ -157,6 +157,11 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
 
 st.session_state.conn.update(worksheet='TROCA', data=troca.drop_duplicates())
 
+for i, row in troca[troca.MOTIVO!='AUTOMÁTICA'].iterrows():
+    de = row.DE
+    para = row.PARA
+    geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
+    
 
 if st.button('Realizar troca de serviço'):
     de = st.date_input('De:', dt.today())
