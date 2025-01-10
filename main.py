@@ -35,7 +35,7 @@ def restrito_update():
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-datas = [dt(ano, 1, 1) + td(i) for i in range(368)]
+datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
