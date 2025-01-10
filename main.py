@@ -132,7 +132,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 troca = pd.concat([troca, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
             else:
                 if pre >= dt(ano, 12, 29):
-                    ignored.append((pre, preta[preta.index(pre) + 2]))
+                    ignored.append((pre, pre+td(2)))
                     continue
                 elif any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
                     ignored.append((pre, preta[preta.index(pre) + 2]))
