@@ -134,7 +134,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 if pre >= dt(ano, 12, 29):
                     ignored.append((pre, preta[preta.index(pre) + 2]))
                     continue
-                else any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
+                elif any((troca.loc[troca.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
                     ignored.append((pre, preta[preta.index(pre) + 2]))
                     continue
                 geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 2]] = geral_corrida.loc[preta[preta.index(pre) + 2]], geral_corrida.loc[pre]
