@@ -168,9 +168,12 @@ if st.button('Realizar troca de serviço'):
     para = st.date_input('Para:', dt.today())
     motivo_troca = st.text_input('Motivo da troca:')
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
-    if st.button('Enviar'):
+    enviar = st.button('Enviar')
+    if enviar:
         troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
         st.session_state.conn.update(worksheet='TROCA', data=troca)
+    else:
+        st.stop()
 
 st.divider()
 
