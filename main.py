@@ -188,5 +188,5 @@ if gera_mes != 0 and len(troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.mont
     st.dataframe(troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month == gera_mes)], hide_index=True)
 if st.button('Gerar!') and gera_mes != 0:
     df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
-    st.write(df)
+    st.dataframe(df, hide_index=True)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
