@@ -13,6 +13,8 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 def troca_update():
     st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=60)
     st.session_state.troca = st.session_state.troca[st.session_state.troca.MOTIVO != 'AUTOMÁTICA']
+    st.session_state.troca['DE'] = pd.to_datetime(st.session_state.troca.DE)
+    st.session_state.troca['PARA'] = pd.to_datetime(st.session_state.troca.PARA)
     return st.session_state.troca
 
 def licpag_update():
