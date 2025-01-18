@@ -159,8 +159,8 @@ st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
 troca = troca_update()
 
-st.write(geral_corrida)
-st.write(troca)
+st.write(geral_corrida.index.dtype)
+st.write(troca.DE.dtype)
 for i, row in troca.iterrows():
     de = row.DE
     para = row.PARA
