@@ -165,7 +165,7 @@ for i, row in troca.iterrows():
     st.write(geral_corrida)
     st.write(geral_corrida.loc[de])
     st.write(geral_corrida.loc[para])
-    geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
+    geral_corrida.loc[de, 'NOME'], geral_corrida.loc[para, 'NOME'] = geral_corrida.loc[para, 'NOME'], geral_corrida.loc[de, 'NOME']
 
 
 with st.form('Trocas', clear_on_submit=True):
