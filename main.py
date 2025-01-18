@@ -162,8 +162,8 @@ troca = troca_update()
 st.write(geral_corrida.index.dtype)
 st.write(troca.DE.dtype)
 for i, row in troca.iterrows():
-    de = dt(row.DE)
-    para = dt(row.PARA)
+    de = pd.to_datetime(row.DE)
+    para = pd.to_datetime(row.PARA)
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
 
 
