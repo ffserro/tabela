@@ -163,6 +163,7 @@ for i, row in troca.iterrows():
     de = row.DE
     para = row.PARA
     st.write(geral_corrida.loc[de])
+    st.write(geral_corrida.loc[para])
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
 
 
