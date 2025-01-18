@@ -178,7 +178,7 @@ with st.form('Trocas', clear_on_submit=True):
 st.divider()
 
 gera_mes = meses.index(st.selectbox('Gerar tabela do mês:', meses))
-if gera_mes != 0:
+if gera_mes != 0 and len(troca[troca.MOTIVO!='AUTOMÁTICA']) > 0:
     st.write(f'Trocas de {["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][gera_mes]}:')
     st.write(troca[troca.MOTIVO!='AUTOMÁTICA'])
 if st.button('Gerar!') and gera_mes != 0:
