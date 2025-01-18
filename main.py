@@ -162,18 +162,17 @@ for i, row in troca[troca.MOTIVO!='AUTOMÁTICA'].iterrows():
     para = row.PARA
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
     
-
-if st.button('Realizar troca de serviço'):
-    de = st.date_input('De:', dt.today())
-    para = st.date_input('Para:', dt.today())
-    motivo_troca = st.text_input('Motivo da troca:')
-    geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
-    enviar = st.button('Enviar')
-    if enviar:
-        troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
-        st.session_state.conn.update(worksheet='TROCA', data=troca)
-    else:
-        st.stop()
+with st.form('Trocas', clear_on_submit=True):
+    if st.button('Realizar troca de serviço'):
+        de = st.date_input('De:', dt.today())
+        para = st.date_input('Para:', dt.today())
+        motivo_troca = st.text_input('Motivo da troca:')
+        geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
+        if st.form_submit_button('Enviar'):
+            troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
+            st.session_state.conn.update(worksheet='TROCA', data=troca)
+        else:
+            st.stop()
 
 st.divider()
 
