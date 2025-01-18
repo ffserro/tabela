@@ -159,7 +159,7 @@ st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
 troca = troca_update()
 st.write(geral_corrida.index.dtype)
-st.write(troca.iloc[0].DE.strftime('%Y-%m-%d').dtype)
+st.write(type(troca.iloc[0].DE.strftime('%Y-%m-%d')))
 for i, row in troca.iterrows():
     de = row.DE.strftime('%Y-%m-%d')
     para = row.PARA.strftime('%Y-%m-%d')
