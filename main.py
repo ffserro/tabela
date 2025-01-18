@@ -169,6 +169,8 @@ with st.form('Trocas', clear_on_submit=True):
     st.write('Realizar trocas de serviço:')
     de = st.date_input('De:', dt.today())
     para = st.date_input('Para:', dt.today())
+    de = pd.to_datetime(de)
+    para = pd.to_datetime(para)
     motivo_troca = st.text_input('Motivo da troca:')
     if st.form_submit_button('Enviar'):
         geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
