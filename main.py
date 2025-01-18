@@ -170,7 +170,7 @@ with st.form('Trocas', clear_on_submit=True):
     if de != para:
         motivo_troca = st.text_input('Motivo da troca:')
         geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
-    if st.form_submit_button('Enviar', disabled=(not (motivo_troca in locals()))):
+    if st.form_submit_button('Enviar'):
         troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
         st.session_state.conn.update(worksheet='TROCA', data=troca)
 
