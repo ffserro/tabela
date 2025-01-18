@@ -158,7 +158,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
 st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
 troca = troca_update()
-st.write(geral_corrida)
+st.write(geral_corrida.index)
 for i, row in troca.iterrows():
     de = row.DE.strftime('%Y-%m-%d')
     para = row.PARA.strftime('%Y-%m-%d')
