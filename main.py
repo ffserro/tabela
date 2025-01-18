@@ -158,10 +158,13 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
 st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
 troca = troca_update()
+
+st.write(geral_corrida)
+st.write(troca)
 for i, row in troca.iterrows():
     de = row.DE
     para = row.PARA
-    geral_corrida.loc[geral_corrida.de == de], geral_corrida.loc[geral_corrida.para == para] = geral_corrida.loc[geral_corrida.para == para], geral_corrida.loc[geral_corrida.de == de]
+    geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
 
 
 with st.form('Trocas', clear_on_submit=True):
