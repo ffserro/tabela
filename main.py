@@ -159,8 +159,8 @@ st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
 troca = troca_update()
 for i, row in troca.iterrows():
-    de = row.DE.dt.strftime('%Y-%m-%d')
-    para = row.PARA.dt.strftime('%Y-%m-%d')
+    de = row.DE.strftime('%Y-%m-%d')
+    para = row.PARA.strftime('%Y-%m-%d')
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
 
 
