@@ -160,10 +160,10 @@ st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 troca = troca_update()
 
 st.write(geral_corrida.index.dtype)
-st.write(troca.DE.dtype)
+st.write(troca.DE.dt.strftime('%Y-%m-%d'))
 for i, row in troca.iterrows():
-    de = pd.to_datetime(row.DE)
-    para = pd.to_datetime(row.PARA)
+    de = row.DE
+    para = row.PARA
     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
 
 
