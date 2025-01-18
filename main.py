@@ -12,8 +12,8 @@ st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 def troca_update():
     st.session_state.troca = st.session_state.conn.read(worksheet='TROCA', ttl=60)
-    st.session_state.troca['DE'] = pd.to_datetime(st.session_state.troca.DE)
-    st.session_state.troca['PARA'] = pd.to_datetime(st.session_state.troca.PARA)
+    st.session_state.troca['DE'] = pd.to_datetime(st.session_state.troca.DE, dayfirst=True)
+    st.session_state.troca['PARA'] = pd.to_datetime(st.session_state.troca.PARA, dayfirst=True)
     return st.session_state.troca
 
 def licpag_update():
@@ -81,7 +81,7 @@ for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
     hoje = hoje + hoje
-    passa = esc_preta.loc[preta[preta.index(d) - 1]][0]
+    passa = esc_preta.loc[preta[preta.index(d) - 1]].iloc[0]
     if passa in hoje:
         esc_preta.loc[d, 'NOME'] = hoje[hoje.index(passa) + 1]
     else:
@@ -90,7 +90,7 @@ for d in esc_preta.index[1:]:
 for d in esc_vermelha.index[1:]:
     ontem = get_disponivel(vermelha[vermelha.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
-    passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]][0]
+    passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]].iloc[0]
     if passa in hoje:
         esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
     else:
