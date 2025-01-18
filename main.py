@@ -162,9 +162,9 @@ geral_corrida.index = pd.to_datetime(geral_corrida.index)
 for i, row in troca.iterrows():
     de = row.DE
     para = row.PARA
-    st.write(geral_corrida)
-    st.write(geral_corrida.loc[de])
-    st.write(geral_corrida.loc[para])
+    # st.write(geral_corrida)
+    # st.write(geral_corrida.loc[de])
+    # st.write(geral_corrida.loc[para])
     geral_corrida.loc[de, 'NOME'], geral_corrida.loc[para, 'NOME'] = geral_corrida.loc[para, 'NOME'], geral_corrida.loc[de, 'NOME']
 
 
