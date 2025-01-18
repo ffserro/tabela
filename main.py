@@ -182,10 +182,13 @@ st.divider()
 
 gera_mes = meses.index(st.selectbox('Gerar tabela do mês:', meses))
 troca['DE'] = pd.to_datetime(troca.DE, dayfirst=True)
-trocas_no_mes = troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month ==gera_mes)]
-if gera_mes != 0 and len(troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month == gera_mes)]) > 0:
+trocas_no_mes = troca[(troca.DE.dt.month ==gera_mes)]
+if gera_mes != 0 and len(troca[(troca.DE.dt.month == gera_mes)]) > 0:
     st.write(f'Trocas de {["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][gera_mes]}:')
-    st.dataframe(troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month == gera_mes)], hide_index=True)
+    troca_viz = troca[(troca.DE.dt.month == gera_mes)]
+    troca_viz['DE'] = troca_viz.DE.dt.date
+    troca_viz['PARA'] = troca_viz.PARA.dt.date
+    st.dataframe(troca_viz, hide_index=True)
 if st.button('Gerar!') and gera_mes != 0:
     df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
     st.dataframe(df, hide_index=True)
