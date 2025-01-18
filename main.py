@@ -160,12 +160,10 @@ st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 troca = troca_update()
 geral_corrida.index = pd.to_datetime(geral_corrida.index)
 for i, row in troca.iterrows():
-    de = row.DE
-    para = row.PARA
-    # st.write(geral_corrida)
-    # st.write(geral_corrida.loc[de])
-    # st.write(geral_corrida.loc[para])
-    geral_corrida.loc[de, 'NOME'], geral_corrida.loc[para, 'NOME'] = geral_corrida.loc[para, 'NOME'], geral_corrida.loc[de, 'NOME']
+    troc1 = geral_corrida.loc[row.DE, 'NOME'].values
+    troc2 = geral_corrida.loc[row.PARA, 'NOME'].values
+    st.write(troc1)
+    # geral_corrida.loc[de, 'NOME'], geral_corrida.loc[para, 'NOME'] = geral_corrida.loc[para, 'NOME'], geral_corrida.loc[de, 'NOME']
 
 
 with st.form('Trocas', clear_on_submit=True):
