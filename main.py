@@ -171,8 +171,7 @@ with st.form('Trocas', clear_on_submit=True):
     if st.form_submit_button('Enviar'):
         troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
         st.session_state.conn.update(worksheet='TROCA', data=troca)
-    else:
-        st.stop()
+
 
 st.divider()
 
