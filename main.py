@@ -180,8 +180,8 @@ with st.form('Trocas', clear_on_submit=True):
 st.divider()
 
 gera_mes = meses.index(st.selectbox('Gerar tabela do mês:', meses))
-st.write(troca.DE.dtype)
-trocas_no_mes = troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.str.split('-')[1] == str(gera_mes))]
+troca['DE'] = pd.to_datetime(troca.DE, dayfirst=True)
+trocas_no_mes = troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month ==gera_mes)]
 if gera_mes != 0 and len(troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month == gera_mes)]) > 0:
     st.write(f'Trocas de {["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][gera_mes]}:')
     st.write(troca[(troca.MOTIVO!='AUTOMÁTICA') & (troca.DE.dt.month == gera_mes)])
