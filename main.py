@@ -205,7 +205,7 @@ df1.set_index('DIA', inplace=True)
 df2.set_index('DIA', inplace=True)
 
 df1.loc[dt(2025,2,28), 'TABELA'] = ['R']
-df2.loc[dt(2025,3,1):dt(2025,3,10), 'TABELA'] = ['R'] * 9
+df2.loc[dt(2025,3,1):dt(2025,3,10), 'TABELA'] = 'R'
 
 col1, col2 = st.columns(2)
 
