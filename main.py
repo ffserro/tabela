@@ -196,7 +196,7 @@ gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', 
 
 
 ### POROROCA
-geral_corrida.loc[dt(2025,2,28):dt(2025,3,10), 'NOME'] = ['CT Tarle', '2T(IM) Soares Costa', 'CT Felipe Gondim', '1T Brenno Carvalho', 'SO-MO Alvarez', 'CT Damasceno', '1T Brenno Carvalho', 'CT(IM) Sêrro', 'CT Belmonte', '2T(IM) Soares Costa']
+geral_corrida.loc[dt(2025,2,28):dt(2025,3,10), 'NOME'] = pd.Series(['CT Tarle', '2T(IM) Soares Costa', 'CT Felipe Gondim', '1T Brenno Carvalho', 'SO-MO Alvarez', 'CT Damasceno', '1T Brenno Carvalho', 'CT(IM) Sêrro', 'CT Belmonte', '2T(IM) Soares Costa'])
 
 df1 = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
 df2 = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == (gera_mes+1)%12], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == (gera_mes+1)%12]})
