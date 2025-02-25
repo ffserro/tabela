@@ -208,8 +208,8 @@ df2.loc[(df2.DIA >= dt(2025,3,1)) & (df2.DIA <= dt(2025,3,9)), 'TABELA'] = 'R'
 
 st.write(df1.dtypes)
 
-df1['DIA'] = df1.DIA.dt.strftime('%d/%m/%Y')
-df2['DIA'] = df2.DIA.dt.strftime('%d/%m/%Y')
+df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
+df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
 
 col1, col2 = st.columns(2)
 
