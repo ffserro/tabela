@@ -214,7 +214,7 @@ with col1:
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
-    st.dataframe(df1, hide_index=True, height=1140)
+    st.dataframe(df1, hide_index=True, height=1130)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
 
 
@@ -224,5 +224,5 @@ with col2:
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
-    st.dataframe(df2, hide_index=True, height=1140)
+    st.dataframe(df2, hide_index=True, height=1130)
     st.session_state.conn.update(worksheet=meses[(gera_mes+1)%12], data=df2)
