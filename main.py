@@ -150,10 +150,10 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
                 ps.append((a, b))
         conflitos[nome] = ps
     
-    if len(set(ignored)) == sum([len(conflitos[nome]) for nome in conflitos]):
-        for a, b in set(ignored):
-            st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
-        break
+    # if len(set(ignored)) == sum([len(conflitos[nome]) for nome in conflitos]):
+    #     for a, b in set(ignored):
+    #         st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
+    #     break
 
 st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
