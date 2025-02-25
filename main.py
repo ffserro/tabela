@@ -196,7 +196,9 @@ gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', 
 
 
 ### POROROCA
-geral_corrida.loc[dt(2025,2,28):dt(2025,3,10), 'NOME'] = pd.Series(['CT Tarle', '2T(IM) Soares Costa', 'CT Felipe Gondim', '1T Brenno Carvalho', 'SO-MO Alvarez', 'CT Damasceno', '1T Brenno Carvalho', 'CT(IM) Sêrro', 'CT Belmonte', '2T(IM) Soares Costa'])
+carnaval = ['CT Tarle', '2T(IM) Soares Costa', 'CT Felipe Gondim', '1T Brenno Carvalho', 'SO-MO Alvarez', 'CT Damasceno', '1T Brenno Carvalho', 'CT(IM) Sêrro', 'CT Belmonte', '2T(IM) Soares Costa']
+for i in range(10):
+    geral_corrida.loc[dt(2025,2,28) + td(days=i)] = carnaval[i]
 
 st.write(geral_corrida.head())
 
