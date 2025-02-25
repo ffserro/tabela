@@ -206,11 +206,6 @@ df2 = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TA
 df1.loc[df1.DIA==dt(2025,2,28), 'TABELA'] = 'R'
 df2.loc[(df2.DIA >= dt(2025,3,1)) & (df2.DIA <= dt(2025,3,9)), 'TABELA'] = 'R'
 
-st.write(df1.dtypes)
-
-df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
-df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
-
 col1, col2 = st.columns(2)
 
 with col1:
@@ -218,6 +213,7 @@ with col1:
     st.markdown(f'<h2>{df1[df1.DIA==dt.today()].NOME.iloc[0]}</h2>', unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
+    df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df1, hide_index=True, height=1120)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
 
@@ -227,5 +223,6 @@ with col2:
     st.markdown(f'<h2>{df1[df1.DIA==dt.today()+td(days=1)].NOME.iloc[0]}</h2>', unsafe_allow_html=True)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
+    df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df2, hide_index=True, height=1120)
     st.session_state.conn.update(worksheet=meses[(gera_mes+1)%12], data=df2)
