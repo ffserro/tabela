@@ -201,17 +201,17 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.title('OSE de hoje:')
-    st.write(df1[df1.DIA==dt.today()])
+    st.write(df1[df1.DIA==dt.today()].NOME)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     st.dataframe(df1, hide_index=True, height=1120)
-    st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
+    st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
 
 
 with col2:
     st.title('OSE de amanhã:')
-    st.write(df1[df1.DIA==dt.today()+td(days=1)])
+    st.write(df1[df1.DIA==dt.today()+td(days=1)].NOME)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     st.dataframe(df2, hide_index=True, height=1120)
-    st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
+    st.session_state.conn.update(worksheet=meses[gera_mes], data=df2)
