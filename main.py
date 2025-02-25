@@ -151,7 +151,7 @@ while any(len(conflitos[nome]) > 0 for nome in conflitos):
         conflitos[nome] = ps
     
     if len(set(ignored)) == sum([len(conflitos[nome]) for nome in conflitos]):
-        for a, b in set(ignored):
+        # for a, b in set(ignored):
             # st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
         break
 
