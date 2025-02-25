@@ -165,22 +165,22 @@ for i, row in troca.iterrows():
     geral_corrida.loc[row.DE, 'NOME'] = troc2
     geral_corrida.loc[row.PARA, 'NOME'] = troc1
 
-with st.form('Trocas', clear_on_submit=True):
-    st.write('Realizar trocas de serviço:')
-    de = st.date_input('De:', dt.today())
-    para = st.date_input('Para:', dt.today())
-    de = pd.to_datetime(de)
-    para = pd.to_datetime(para)
-    motivo_troca = st.text_input('Motivo da troca:')
-    geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
-    if st.form_submit_button('Enviar'):
-        troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
-        st.session_state.conn.update(worksheet='TROCA', data=troca)
+# with st.form('Trocas', clear_on_submit=True):
+#     st.write('Realizar trocas de serviço:')
+#     de = st.date_input('De:', dt.today())
+#     para = st.date_input('Para:', dt.today())
+#     de = pd.to_datetime(de)
+#     para = pd.to_datetime(para)
+#     motivo_troca = st.text_input('Motivo da troca:')
+#     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
+#     if st.form_submit_button('Enviar'):
+#         troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
+#         st.session_state.conn.update(worksheet='TROCA', data=troca)
 
-
-st.divider()
+# st.divider()
 
 gera_mes = meses.index(st.selectbox('Gerar tabela do mês:', meses))
+
 troca['DE'] = pd.to_datetime(troca.DE, dayfirst=True)
 trocas_no_mes = troca[(troca.DE.dt.month ==gera_mes)]
 if gera_mes != 0 and len(troca[(troca.DE.dt.month == gera_mes)]) > 0:
