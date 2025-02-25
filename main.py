@@ -220,7 +220,7 @@ with col1:
 
 with col2:
     st.title('OSE de amanhã:')
-    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today() + td(days=1))][0]}</h2>', unsafe_allow_html=True)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
