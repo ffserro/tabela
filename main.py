@@ -194,5 +194,5 @@ gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', 
 # if st.button('Gerar!') and gera_mes != 0:
 
 df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
-st.dataframe(df, hide_index=True)
+st.table(df, hide_index=True)
 st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
