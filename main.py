@@ -193,17 +193,25 @@ gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', 
 
 # if st.button('Gerar!') and gera_mes != 0:
 
+df1 = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
+df2 = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == (gera_mes+1)%12], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == (gera_mes+1)%12]})
+
+
 col1, col2 = st.columns(2)
 
 with col1:
+    st.title('OSE de hoje:')
+    st.write(df1[df1.DIA==dt.today()])
+    st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
-    df = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
-    st.dataframe(df, hide_index=True, height=1120)
+    st.dataframe(df1, hide_index=True, height=1120)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
 
 
 with col2:
+    st.title('OSE de amanhã:')
+    st.write(df1[df1.DIA==dt.today()+td(days=1)])
+    st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
-    df = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == (gera_mes+1)%12], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == (gera_mes+1)%12]})
-    st.dataframe(df, hide_index=True, height=1120)
+    st.dataframe(df2, hide_index=True, height=1120)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df)
