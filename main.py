@@ -44,7 +44,8 @@ vermelha, preta = [], []
 
 licpag = licpag_update()
 for d in datas:
-    if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values):
+    #  final de semana           feriados           licpag                       carnaval
+    if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values) or (d >= dt(2025,2,28) and d<= dt(2025,3,9)):
         vermelha.append(d)
     else:
         preta.append(d)
