@@ -5,6 +5,9 @@ from datetime import date as dt, timedelta as td
 from calendar import monthrange
 
 import holidays
+from dateutil import tz
+
+tzinfo = tz.gettz('America/Sao_Paulo')
 
 # st.title('TABELONA DO 💡')
 
@@ -180,7 +183,7 @@ for i, row in troca.iterrows():
 
 # st.divider()
 
-gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
+gera_mes = dt.today(tz=tzinfo).month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
 
 
 # troca['DE'] = pd.to_datetime(troca.DE, dayfirst=True)
@@ -210,7 +213,7 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.title('OSE de hoje:')
-    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today(tz=tzinfo))][0]}</h2>', unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
@@ -220,7 +223,7 @@ with col1:
 
 with col2:
     st.title('OSE de amanhã:')
-    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today() + td(days=1))][0]}</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today(tz=tzinfo) + td(days=1))][0]}</h2>', unsafe_allow_html=True)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
