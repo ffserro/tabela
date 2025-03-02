@@ -183,7 +183,7 @@ for i, row in troca.iterrows():
 
 # st.divider()
 
-gera_mes = dt.datetime.now(tz=tzinfo).month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
+gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
 
 
 # troca['DE'] = pd.to_datetime(troca.DE, dayfirst=True)
