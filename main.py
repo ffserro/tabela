@@ -212,7 +212,7 @@ df2.loc[(df2.DIA >= dt(2025,3,1)) & (df2.DIA <= dt(2025,3,9)), 'TABELA'] = 'R'
 col1, col2 = st.columns(2)
 
 with col1:
-    st.title(f'OSE de {dt.today()}}:')
+    st.title(f'OSE de {dt.today()}:')
     st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>', unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
