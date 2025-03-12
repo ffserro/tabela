@@ -208,16 +208,22 @@ df2 = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TA
 
 df1.loc[(df1.DIA >= dt(2025,3,1)) & (df1.DIA <= dt(2025,3,9)), 'TABELA'] = 'R'
 
+if dt.today() in preta:
+    retem1 = preta[preta.index(dt.today())+3]
+elif dt.today() in vermelha:
+    retem1 = vermelha[vermelha.index(dt.today()) + 3]
+
+if (dt.today() + td(days=1)) in preta:
+    retem2 = preta[preta.index(dt.today() + td(days=1))+3]
+elif (dt.today() + td(days=1)) in vermelha:
+    retem2 = vermelha[vermelha.index(dt.today() + td(days=1)) + 3]
+
 col1, col2 = st.columns(2)
 
 with col1:
     st.title(f'OSE de {dt.today().strftime('%d/%m')}:')
     st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>', unsafe_allow_html=True)
-    if dt.today() in preta:
-        retem = preta[preta.index(dt.today())+3]
-    elif dt.today() in vermelha:
-        retem = vermelha[vermelha.index(dt.today()) + 3]
-    st.markdown(f'<h4>Retém: {geral_corrida.loc[pd.to_datetime(retem)][0]}</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h5>Retém: {geral_corrida.loc[pd.to_datetime(retem1)][0]}</h2>', unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
@@ -228,6 +234,7 @@ with col1:
 with col2:
     st.title(f'OSE de {(dt.today() + td(days=1)).strftime('%d/%m')}:')
     st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today() + td(days=1))][0]}</h2>', unsafe_allow_html=True)
+    st.markdown(f'<h5>Retém: {geral_corrida.loc[pd.to_datetime(retem2)][0]}</h2>', unsafe_allow_html=True)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
