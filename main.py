@@ -213,6 +213,11 @@ col1, col2 = st.columns(2)
 with col1:
     st.title(f'OSE de {dt.today().strftime('%d/%m')}:')
     st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>', unsafe_allow_html=True)
+    if dt.today() in preta:
+        retem = preta[preta.index(dt.today())+3]
+    elif dt.today() in vermelha:
+        retem = vermelha[vermelha.index(dt.today()) + 3]
+    st.markdown(f'<h4>Retém: {geral_corrida.loc[pd.to_datetime(retem)][0]}</h2>', unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
