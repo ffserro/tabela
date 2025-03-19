@@ -86,7 +86,7 @@ esc_preta = pd.DataFrame({'DATA':preta})
 esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
 esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = '1T Brenno Carvalho'
-esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
+esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Tarle'
 
 
 
