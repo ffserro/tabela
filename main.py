@@ -151,17 +151,17 @@ for d in esc_vermelha.index[1:]:
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
-conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
+#conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
 
-for nome in conflitos:
-    ps = []
-    for i in range(len(conflitos[nome])-1):
-        a, b = conflitos[nome][i], conflitos[nome][i + 1]
-        if b - a <= td(2):
-            ps.append((a, b))
-    conflitos[nome] = ps
+#for nome in conflitos:
+#    ps = []
+#    for i in range(len(conflitos[nome])-1):
+#        a, b = conflitos[nome][i], conflitos[nome][i + 1]
+#        if b - a <= td(2):
+#            ps.append((a, b))
+#    conflitos[nome] = ps
 
-st.write(conflitos)
+#st.write(conflitos)
 
 # auto = pd.DataFrame({'DE':[], 'PARA':[], 'MOTIVO':[]})
 # while any(len(conflitos[nome]) > 0 for nome in conflitos):
@@ -212,6 +212,15 @@ for i, row in troca.iterrows():
     geral_corrida.loc[row.DE, 'NOME'] = troc2
     geral_corrida.loc[row.PARA, 'NOME'] = troc1
 
+conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
+for nome in conflitos:
+    ps = []
+    for i in range(len(conflitos[nome])-1):
+        a, b = conflitos[nome][i], conflitos[nome][i + 1]
+        if b - a <= td(2):
+            ps.append((a, b))
+    conflitos[nome] = ps
+
 gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
 
 
@@ -247,6 +256,7 @@ with col1:
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df1, hide_index=True, height=1125)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
+    st.write(conflitos)
 
 
 with col2:
