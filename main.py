@@ -75,9 +75,9 @@ def get_disponivel(data, efetivo, restrito):
 def que_se_segue(passa, efetivo, hoje, tabela):
     efetivos = list(efetivo.NOME.values)
     if tabela == 'p':
-        efetivos = efetivos.iloc[::-1]
+        efetivos = efetivos[::-1]
     for i in range(1, len(efetivos)):
-        cara = efetivos.iloc[efetivos[efetivos.NOME==passa].index - i]
+        cara = efetivos[efetivos.index(passa) - i]
         if cara in hoje:
             return cara
     
