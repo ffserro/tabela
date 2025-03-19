@@ -240,6 +240,4 @@ with col2:
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df2, hide_index=True, height=1125)
     st.session_state.conn.update(worksheet=meses[(gera_mes+1)%12], data=df2)
-st.write(geral_corrida.loc[vermelha])
-st.write(geral_corrida.loc[vermelha].value_counts())
 
