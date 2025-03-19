@@ -73,7 +73,7 @@ def get_disponivel(data, efetivo, restrito):
     return disp
 
 def que_se_segue(passa, efetivo, hoje, tabela):
-    efetivos = efetivo.NOME.values
+    efetivos = list(efetivo.NOME.values)
     if tabela == 'p':
         efetivos = efetivos.iloc[::-1]
     for i in range(1, len(efetivos)):
