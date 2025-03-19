@@ -42,7 +42,7 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
 #######
-datas = [i for i in datas if i.month in (dt.today().month, (dt.today().month-1)%12+1)]
+# datas = [i for i in datas if i.month in (dt.today().month, (dt.today().month-1)%12+1)]
 
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
@@ -76,8 +76,8 @@ def get_disponivel(data, efetivo, restrito):
 esc_preta = pd.DataFrame({'DATA':preta})
 esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
-# esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
-# esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
+esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
+esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
 
 
 
