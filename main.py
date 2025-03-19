@@ -95,8 +95,8 @@ esc_vermelha.set_index('DATA', inplace=True)
 
 restrito = restrito_update()
 efetivo = efetivo_update()
-st.write(list(efetivo.NOME.values))
-st.write(list(efetivo.NOME.values)[::-1])
+# st.write(list(efetivo.NOME.values))
+# st.write(list(efetivo.NOME.values)[::-1])
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
@@ -146,8 +146,8 @@ for d in esc_vermelha.index[1:]:
             # st.write(hoje)
             # st.write(passa)
 
-st.write('preta', esc_preta)
-st.write('vermelha', esc_vermelha)
+# st.write('preta', esc_preta)
+# st.write('vermelha', esc_vermelha)
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
