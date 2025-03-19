@@ -95,6 +95,7 @@ esc_vermelha.set_index('DATA', inplace=True)
 
 restrito = restrito_update()
 efetivo = efetivo_update()
+st.write(list(efetivo.NOME.values))
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
@@ -208,39 +209,14 @@ for i, row in troca.iterrows():
     geral_corrida.loc[row.DE, 'NOME'] = troc2
     geral_corrida.loc[row.PARA, 'NOME'] = troc1
 
-# with st.form('Trocas', clear_on_submit=True):
-#     st.write('Realizar trocas de serviço:')
-#     de = st.date_input('De:', dt.today())
-#     para = st.date_input('Para:', dt.today())
-#     de = pd.to_datetime(de)
-#     para = pd.to_datetime(para)
-#     motivo_troca = st.text_input('Motivo da troca:')
-#     geral_corrida.loc[de], geral_corrida.loc[para] = geral_corrida.loc[para], geral_corrida.loc[de]
-#     if st.form_submit_button('Enviar'):
-#         troca = pd.concat([troca, pd.DataFrame({'DE':[de], 'PARA':[para], 'MOTIVO':[motivo_troca]})])
-#         st.session_state.conn.update(worksheet='TROCA', data=troca)
-
-# st.divider()
-
 gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
-
-
-# troca['DE'] = pd.to_datetime(troca.DE, dayfirst=True)
-# trocas_no_mes = troca[(troca.DE.dt.month == gera_mes)]
-# if gera_mes != 0 and len(troca[(troca.DE.dt.month == gera_mes)]) > 0:
-#     st.write(f'Trocas de {["", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"][gera_mes]}:')
-#     troca_viz = troca[(troca.DE.dt.month == gera_mes)]
-#     troca_viz['DE'] = troca_viz.DE.dt.date
-#     troca_viz['PARA'] = troca_viz.PARA.dt.date
-#     st.dataframe(troca_viz, hide_index=True)
-
-# if st.button('Gerar!') and gera_mes != 0:
 
 
 ### POROROCA
 carnaval = ['CT Tarle', '2T(IM) Soares Costa', 'CT Felipe Gondim', '1T Brenno Carvalho', 'SO-MO Alvarez', 'CT Damasceno', '1T Brenno Carvalho', 'CT(IM) Sêrro', 'CT Belmonte', '2T(IM) Soares Costa']
 for i in range(10):
     geral_corrida.loc[pd.to_datetime(dt(2025,2,28) + td(days=i))] = carnaval[i]
+
 
 df1 = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
 df2 = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == (gera_mes+1)%12], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == (gera_mes+1)%12]})
