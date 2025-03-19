@@ -144,6 +144,9 @@ for d in esc_vermelha.index[1:]:
             # st.write(hoje)
             # st.write(passa)
 
+st.write('preta', esc_preta)
+st.write('vermelha', esc_vermelha)
+
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
 conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
