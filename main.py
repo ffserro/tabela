@@ -221,6 +221,14 @@ for nome in conflitos:
             ps.append((a, b))
     conflitos[nome] = ps
 
+def filtra(mes, conflitos):
+  novo_conflitos = {}
+  for i in conflitos:
+    for j in conflitos[i]:
+      if j[0].month==mes or j[1].month==mes:
+        novo_conflitos[i] = j
+  return novo_conflitos
+    
 gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
 
 
@@ -256,7 +264,7 @@ with col1:
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df1, hide_index=True, height=1125)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
-    st.write(conflitos)
+    st.write(pd.DataFrame(gera_mes, conflitos))
 
 
 with col2:
