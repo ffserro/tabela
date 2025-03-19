@@ -116,8 +116,8 @@ for d in esc_vermelha.index[1:]:
             # st.write(efetivo)
             st.write(d, passa)
             st.write(que_se_segue(passa, efetivo, hoje, 'v'))
-            # st.write(hoje)
-            # st.write(ontem)
+            st.write(hoje)
+            st.write(ontem)
             esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
         except Exception as e:
             st.write(e)
