@@ -116,20 +116,27 @@ for d in esc_vermelha.index[1:]:
     ontem = get_disponivel(vermelha[vermelha.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
     passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]].iloc[0]
-    if passa in hoje:
-        esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
-    else:
-        try:
-            # st.write(efetivo)
-            st.write(d, passa)
-            st.write(que_se_segue(passa, efetivo, hoje, 'v'))
-            st.write(hoje)
-            st.write(ontem)
-            # esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
-            esc_vermelha.loc[d, 'NOME']  = que_se_segue(passa, efetivo, hoje, 'v')
-        except Exception as e:
-            st.write(e)
-            pass
+
+    try:
+        esc_vermelha.loc[d, 'NOME'] = que_se_segue(passa, efetivo, hoje, 'v')
+    except Exception as e:
+        st.write(e)
+        pass
+    
+    #if passa in hoje:
+    #    esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
+    #else:
+    #    try:
+    #        # st.write(efetivo)
+    #        st.write(d, passa)
+    #        st.write(que_se_segue(passa, efetivo, hoje, 'v'))
+    #        st.write(hoje)
+    #        st.write(ontem)
+    #        # esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
+    #        esc_vermelha.loc[d, 'NOME']  = que_se_segue(passa, efetivo, hoje, 'v')
+    #    except Exception as e:
+    #        st.write(e)
+    #        pass
             # st.write(esc_vermelha.dropna().tail())
             # st.write('hoje', d)
             # st.write('ontem', d - td(1))
