@@ -41,14 +41,17 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 
 datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
+#######
+datas = [i for i in datas if i.month in (dt.today().month(), (dt.today().month()-1)%12+1)]
+
 feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13)]
 
 vermelha, preta = [], []
 
 licpag = licpag_update()
 for d in datas:
-    #  final de semana           feriados           licpag                      ### carnaval
-    if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values):# or (d >= dt(2025,2,28) and d<= dt(2025,3,9)):
+    #  final de semana           feriados           licpag
+    if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values):
         vermelha.append(d)
     else:
         preta.append(d)
@@ -73,8 +76,10 @@ def get_disponivel(data, efetivo, restrito):
 esc_preta = pd.DataFrame({'DATA':preta})
 esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
-esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
-esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
+# esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
+# esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
+
+
 
 esc_preta.set_index('DATA', inplace=True)
 esc_vermelha.set_index('DATA', inplace=True)
@@ -99,6 +104,7 @@ for d in esc_vermelha.index[1:]:
         esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
     else:
         try:
+            st.write(efetivo)
             st.write(d, passa)
             st.write(hoje)
             st.write(ontem)
