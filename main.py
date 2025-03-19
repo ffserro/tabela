@@ -99,6 +99,9 @@ for d in esc_vermelha.index[1:]:
         esc_vermelha.loc[d, 'NOME'] = hoje[hoje.index(passa) - 1]
     else:
         try:
+            st.write(passa)
+            st.write(hoje)
+            st.write(ontem)
             esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
         except:
             st.write(esc_vermelha.dropna().tail())
