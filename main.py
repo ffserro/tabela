@@ -256,7 +256,7 @@ with col1:
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df1, hide_index=True, height=1125)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
-    st.dataframe(pd.DataFrame(conflitos))
+    st.write(conflitos)
 
 
 with col2:
