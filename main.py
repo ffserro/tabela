@@ -202,7 +202,7 @@ st.write(conflitos)
 #            # st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
 #        break
 
-st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
+# st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
 troca = troca_update()
 geral_corrida.index = pd.to_datetime(geral_corrida.index)
