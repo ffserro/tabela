@@ -85,7 +85,7 @@ def que_se_segue(passa, efetivo, hoje, tabela):
 esc_preta = pd.DataFrame({'DATA':preta})
 esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
-esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT(IM) Sêrro'
+esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = 'CT Damasceno'
 esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Felipe Gondim'
 
 
