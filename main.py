@@ -265,7 +265,7 @@ with col1:
     st.dataframe(df1, hide_index=True, height=1125)
     st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
     st.write('Conflitos:')
-    st.write(pd.DataFrame(pd.DataFrame(filtra(gera_mes, conflitos)).T, columns=['DE', 'PARA']))
+    st.write(pd.DataFrame(filtra(gera_mes, conflitos)).T.rename(columns={0:'DE', 1:'PARA'}))
 
 
 with col2:
