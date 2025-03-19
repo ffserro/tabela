@@ -119,13 +119,15 @@ for d in esc_vermelha.index[1:]:
             # st.write(hoje)
             # st.write(ontem)
             esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
-        except:
-            st.write(esc_vermelha.dropna().tail())
-            st.write('hoje', d)
-            st.write('ontem', d - td(1))
-            st.write(ontem)
-            st.write(hoje)
-            st.write(passa)
+        except Exception as e:
+            st.write(e)
+            pass
+            # st.write(esc_vermelha.dropna().tail())
+            # st.write('hoje', d)
+            # st.write('ontem', d - td(1))
+            # st.write(ontem)
+            # st.write(hoje)
+            # st.write(passa)
 
 geral_corrida = pd.concat([esc_preta, esc_vermelha]).sort_index()
 
