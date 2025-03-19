@@ -96,6 +96,7 @@ esc_vermelha.set_index('DATA', inplace=True)
 restrito = restrito_update()
 efetivo = efetivo_update()
 st.write(list(efetivo.NOME.values))
+st.write(list(efetivo.NOME.values)[::-1])
 for d in esc_preta.index[1:]:
     ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
