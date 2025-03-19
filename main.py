@@ -85,7 +85,7 @@ def que_se_segue(passa, efetivo, hoje, tabela):
 esc_preta = pd.DataFrame({'DATA':preta})
 esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
-esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = '1T Gianluca'
+esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = '1T Brenno Carvalho'
 esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT Tarle'
 
 
@@ -161,44 +161,46 @@ for nome in conflitos:
             ps.append((a, b))
     conflitos[nome] = ps
 
-auto = pd.DataFrame({'DE':[], 'PARA':[], 'MOTIVO':[]})
-while any(len(conflitos[nome]) > 0 for nome in conflitos):
-    ignored = []
-    for nome in conflitos:
-        for conflito in conflitos[nome]:
-            ver = conflito[0] if conflito[0] in vermelha else conflito[1]
-            pre = conflito[1] if conflito[1] in preta else conflito[0]
-    
-            if pre < ver:
-                if any((auto.loc[auto.DE==pre].PARA==preta[preta.index(pre) - 2]).values) or (pre, preta[preta.index(pre) - 2]) in ignored:
-                    ignored.append((pre, preta[preta.index(pre) - 2]))
-                    continue
-                geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
-                auto = pd.concat([auto, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
-            else:
-                if pre >= dt(ano, 12, 29):
-                    ignored.append((pre, pre+td(2)))
-                    continue
-                elif any((auto.loc[auto.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
-                    ignored.append((pre, preta[preta.index(pre) + 2]))
-                    continue
-                geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 2]] = geral_corrida.loc[preta[preta.index(pre) + 2]], geral_corrida.loc[pre]
-                auto = pd.concat([auto, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 2]], 'MOTIVO':['AUTOMÁTICA']})])
+st.write(conflitos)
 
-    conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
+# auto = pd.DataFrame({'DE':[], 'PARA':[], 'MOTIVO':[]})
+# while any(len(conflitos[nome]) > 0 for nome in conflitos):
+#    ignored = []
+#    for nome in conflitos:
+#        for conflito in conflitos[nome]:
+#            ver = conflito[0] if conflito[0] in vermelha else conflito[1]
+#            pre = conflito[1] if conflito[1] in preta else conflito[0]
+#    
+#            if pre < ver:
+#                if any((auto.loc[auto.DE==pre].PARA==preta[preta.index(pre) - 2]).values) or (pre, preta[preta.index(pre) - 2]) in ignored:
+#                    ignored.append((pre, preta[preta.index(pre) - 2]))
+#                    continue
+#                geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) - 2]] = geral_corrida.loc[preta[preta.index(pre) - 2]], geral_corrida.loc[pre]
+#                auto = pd.concat([auto, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) - 2]], 'MOTIVO':['AUTOMÁTICA']})])
+#            else:
+#                if pre >= dt(ano, 12, 29):
+#                    ignored.append((pre, pre+td(2)))
+#                    continue
+#                elif any((auto.loc[auto.DE==pre].PARA==preta[preta.index(pre) + 2]).values) or (pre, preta[preta.index(pre) + 2]) in ignored:
+#                    ignored.append((pre, preta[preta.index(pre) + 2]))
+#                    continue
+#                geral_corrida.loc[pre], geral_corrida.loc[preta[preta.index(pre) + 2]] = geral_corrida.loc[preta[preta.index(pre) + 2]], geral_corrida.loc[pre]
+#                auto = pd.concat([auto, pd.DataFrame({'DE':[pre], 'PARA':[preta[preta.index(pre) + 2]], 'MOTIVO':['AUTOMÁTICA']})])
+
+#    conflitos = {nome:list(geral_corrida[geral_corrida.NOME==nome].index) for nome in efetivo.NOME}
     
-    for nome in conflitos:
-        ps = []
-        for i in range(len(conflitos[nome])-1):
-            a, b = conflitos[nome][i], conflitos[nome][i + 1]
-            if b - a <= td(2):
-                ps.append((a, b))
-        conflitos[nome] = ps
-    
-    if len(set(ignored)) == sum([len(conflitos[nome]) for nome in conflitos]):
-        # for a, b in set(ignored):
-            # st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
-        break
+#    for nome in conflitos:
+#        ps = []
+#        for i in range(len(conflitos[nome])-1):
+#            a, b = conflitos[nome][i], conflitos[nome][i + 1]
+#            if b - a <= td(2):
+#                ps.append((a, b))
+#        conflitos[nome] = ps
+#    
+#    if len(set(ignored)) == sum([len(conflitos[nome]) for nome in conflitos]):
+#        # for a, b in set(ignored):
+#            # st.write(f'Houve conflito nas trocas automáticas entre os dias {a.strftime('%d/%m')} e {b.strftime('%d/%m')}')
+#        break
 
 st.session_state.conn.update(worksheet='TROCA_AUT', data=auto.drop_duplicates())
 
