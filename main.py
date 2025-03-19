@@ -71,6 +71,15 @@ def get_disponivel(data, efetivo, restrito):
         if i in disp:
             disp.remove(i)
     return disp
+
+def que_se_segue(passa, efetivo, hoje, tabela):
+    efetivos = efetivo.NOME.values
+    if tabela == 'p':
+        efetivos = efetivos.iloc[::-1]
+    for i in range(1, len(efetivos)):
+        cara = efetivos.iloc[efetivos[efetivos.NOME==passa].index - i]
+        if cara in hoje:
+            return cara
     
 
 esc_preta = pd.DataFrame({'DATA':preta})
@@ -106,6 +115,7 @@ for d in esc_vermelha.index[1:]:
         try:
             st.write(efetivo)
             st.write(d, passa)
+            st.write(que_se_segue(passa, efetivo, hoje, 'v'))
             st.write(hoje)
             st.write(ontem)
             esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
