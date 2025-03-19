@@ -100,10 +100,17 @@ for d in esc_preta.index[1:]:
     hoje = get_disponivel(d, efetivo, restrito)
     hoje = hoje + hoje
     passa = esc_preta.loc[preta[preta.index(d) - 1]].iloc[0]
-    if passa in hoje:
-        esc_preta.loc[d, 'NOME'] = hoje[hoje.index(passa) + 1]
-    else:
-        esc_preta.loc[d, 'NOME'] = hoje[ontem.index(passa)]
+
+    try:
+        esc_preta.loc[d, 'NOME'] = que_se_segue(passa, efetivo, hoje, 'p')
+    except Exception as e:
+        st.write(e)
+        pass
+    
+    #if passa in hoje:
+    #    esc_preta.loc[d, 'NOME'] = hoje[hoje.index(passa) + 1]
+    #else:
+    #    esc_preta.loc[d, 'NOME'] = hoje[ontem.index(passa)]
 
 for d in esc_vermelha.index[1:]:
     ontem = get_disponivel(vermelha[vermelha.index(d) - 1], efetivo, restrito)
@@ -118,7 +125,8 @@ for d in esc_vermelha.index[1:]:
             st.write(que_se_segue(passa, efetivo, hoje, 'v'))
             st.write(hoje)
             st.write(ontem)
-            esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
+            # esc_vermelha.loc[d, 'NOME'] = hoje[ontem.index(passa) - 1]
+            esc_vermelha.loc[d, 'NOME']  = que_se_segue(passa, efetivo, hoje, 'v')
         except Exception as e:
             st.write(e)
             pass
