@@ -34,7 +34,7 @@ def restrito_update():
     st.session_state.restrito = st.session_state.conn.read(worksheet='REST', ttl=60)
     st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
     st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
-    st.session_state.restrito[st.session_state.restrito['MOTIVO']=='Férias', 'INICIAL'] -= td(days=1)
+    st.session_state.restrito[st.session_state.restrito['MOTIVO']=='Férias', 'INICIAL'] = st.session_state.restrito[st.session_state.restrito['MOTIVO']=='Férias', 'INICIAL'] - td(days=1)
     return st.session_state.restrito
 
 ano = 2025
