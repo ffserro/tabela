@@ -35,7 +35,7 @@ def restrito_update():
     st.session_state.restrito['INICIAL'] = pd.to_datetime(st.session_state.restrito['INICIAL'], dayfirst=True).dt.date
     st.session_state.restrito['FINAL'] = pd.to_datetime(st.session_state.restrito['FINAL'], dayfirst=True).dt.date
     st.write(st.session_state.restrito)
-    st.session_state.restrito.apply(lambda x: x.INICIAL - td(days=1) if x.MOTIVO=='Férias')
+    st.session_state.restrito.apply(lambda x: x.INICIAL = x.INICIAL - td(days=1) if x.MOTIVO=='Férias' else x.INICIAL = x.INICIAL)
     st.write(st.session_state.restrito)
     return st.session_state.restrito
 
