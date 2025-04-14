@@ -229,7 +229,10 @@ def filtra(mes, conflitos):
   for i in conflitos:
     for j in conflitos[i]:
       if j[0].month==mes or j[1].month==mes:
-        novo_conflitos[i] = [x.strftime('%d/%m') for x in j]
+          if i in novo_conflitos.keys():
+              novo_conflitos[i+f'_{list(novo_conflitos).count(i)}'] = [x.strftime('%d/%m') for x in j]
+          else:
+              novo_conflitos[i] = [x.strftime('%d/%m') for x in j]
   return novo_conflitos
     
 gera_mes = dt.today().month # meses.index(st.selectbox('Gerar tabela do mês:', meses))
