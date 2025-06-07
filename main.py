@@ -46,7 +46,7 @@ datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 #######
 # datas = [i for i in datas if i.month in (dt.today().month, (dt.today().month-1)%12+1)]
 
-feriados = holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13), dt(2025, 6, 19)]
+feriados = sorted(holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13), dt(ano, 6, 19)])
 
 vermelha, preta = [], []
 
