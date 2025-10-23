@@ -54,7 +54,7 @@ datas = [ts.date() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
 
 feriados = sorted(
     list(holidays.Brazil()[dt(2025, 1, 1) : dt(2025 + 1, 1, 1)])
-    + [dt.date(dt(2025, 6, 11)), dt.date(dt(2025, 12, 13)), dt.date(dt(2025, 6, 19))]
+    + [dt.date(dt(2025, 6, 11)), dt.date(dt(2025, 12, 13)), dt.date(dt(2025, 6, 19)), dt.date(dt(2025,10,27))]
 )
 vermelha, preta = [], []
 
