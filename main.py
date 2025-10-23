@@ -109,10 +109,12 @@ efetivo = efetivo_update()
 # st.write(list(efetivo.NOME.values))
 # st.write(list(efetivo.NOME.values)[::-1])
 for d in esc_preta.index[1:]:
-    ontem = get_disponivel(preta[preta.index(d) - 1], efetivo, restrito)
+    preta_idx = {data:i for i,data in enumerate(preta)}
+
+    ontem = get_disponivel(preta[preta_idx[d] - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
     hoje = hoje + hoje
-    passa = esc_preta.loc[preta[preta.index(d) - 1]].iloc[0]
+    passa = esc_preta.loc[preta[preta_idx[d] - 1]].iloc[0]
 
     try:
         esc_preta.loc[d, 'NOME'] = que_se_segue(passa, efetivo, hoje, 'p')
@@ -126,9 +128,11 @@ for d in esc_preta.index[1:]:
     #    esc_preta.loc[d, 'NOME'] = hoje[ontem.index(passa)]
 
 for d in esc_vermelha.index[1:]:
-    ontem = get_disponivel(vermelha[vermelha.index(d) - 1], efetivo, restrito)
+    vermelha_idx = {data:i for i,data in enumerate(vermelha)}
+
+    ontem = get_disponivel(vermelha[vermelha_idx[d] - 1], efetivo, restrito)
     hoje = get_disponivel(d, efetivo, restrito)
-    passa = esc_vermelha.loc[vermelha[vermelha.index(d) - 1]].iloc[0]
+    passa = esc_vermelha.loc[vermelha[vermelha_idx[d] - 1]].iloc[0]
 
     try:
         esc_vermelha.loc[d, 'NOME'] = que_se_segue(passa, efetivo, hoje, 'v')
