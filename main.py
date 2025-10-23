@@ -50,11 +50,12 @@ datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-3
 
 feriados = sorted(holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13), dt(ano, 6, 19)])
 
-licpags = set(licpag.DATA.values)
-
 vermelha, preta = [], []
 
 licpag = licpag_update()
+
+licpags = set(licpag.DATA.values)
+
 for d in datas:
     #  final de semana           feriados           licpag
     if (d.weekday() in (5,6)) or (d in feriados) or (d in licpags):
