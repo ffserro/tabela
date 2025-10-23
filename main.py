@@ -41,19 +41,23 @@ def restrito_update():
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
+datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
+
+# datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
 #######
 # datas = [i for i in datas if i.month in (dt.today().month, (dt.today().month-1)%12+1)]
 
 feriados = sorted(holidays.Brazil()['{}-01-01'.format(ano): '{}-12-31'.format(ano)] + [dt(ano, 6, 11), dt(ano, 12, 13), dt(ano, 6, 19)])
 
+licpags = set(licpag.DATA.values)
+
 vermelha, preta = [], []
 
 licpag = licpag_update()
 for d in datas:
     #  final de semana           feriados           licpag
-    if (d.weekday() in (5,6)) or (d in feriados) or (d in licpag.DATA.values):
+    if (d.weekday() in (5,6)) or (d in feriados) or (d in licpags):
         vermelha.append(d)
     else:
         preta.append(d)
@@ -66,20 +70,25 @@ for d in vermelha:
 vermelha.sort()        
 
 def get_disponivel(data, efetivo, restrito):
-    disp = list(efetivo.NOME.values)
+    # disp = list(efetivo.NOME.values)
+    disp = set(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
-        disp.remove(i)
+        # disp.remove(i)
+        disp = disp - set(i)
     for i in restrito[(restrito.INICIAL <= data) & (restrito.FINAL >= data)].NOME.unique():
         if i in disp:
-            disp.remove(i)
+            # disp.remove(i)
+            disp = disp - set(i)
     return disp
 
 def que_se_segue(passa, efetivo, hoje, tabela):
     efetivos = list(efetivo.NOME.values)
+    efetivos_idx = {nome:i for i,nome in enumerate(efetivos)}
     if tabela == 'p':
         efetivos = efetivos[::-1]
     for i in range(1, len(efetivos)):
-        cara = efetivos[efetivos.index(passa) - i]
+        # cara = efetivos[efetivos.index(passa) - i]
+        cara = efetivos[efetivos_idx[passa] - 1]
         if cara in hoje:
             return cara
     
