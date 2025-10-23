@@ -41,7 +41,7 @@ def restrito_update():
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-datas = list(map(dt, pd.date_rage(f'{ano}-01-01', f'{ano}-12-31')))
+datas = list(map(dt, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
 
 # datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
 
