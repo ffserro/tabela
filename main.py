@@ -43,7 +43,7 @@ meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OU
 
 # datas = list(map(dt.date, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
 
-datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
+datas = [ts.date() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
 
 # datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
@@ -52,8 +52,10 @@ datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-3
 
 # feriados = list(map(dt, sorted(holidays.Brazil()[dt(ano,1,1): dt(ano+1,1,1)] + [dt.date(dt(ano, 6, 11)), dt.date(dt(ano, 12, 13)), dt.date(dt(ano, 6, 19))])))
 
-feriados = list(map(dt.fromisoformat, [i. isoformat() for i in sorted(holidays.Brazil()[dt(2025,1,1): dt(2025+1,1,1)] + [dt.date(dt(2025, 6, 11)), dt.date(dt(2025, 12, 13)), dt.date(dt(2025, 6, 19))])]))
-
+feriados = sorted(
+    list(holidays.Brazil()[dt(2025, 1, 1) : dt(2025 + 1, 1, 1)].keys())
+    + [dt.date(dt(2025, 6, 11)), dt.date(dt(2025, 12, 13)), dt.date(dt(2025, 6, 19))]
+)
 vermelha, preta = [], []
 
 licpag = licpag_update()
@@ -76,15 +78,17 @@ vermelha.sort()
 
 def get_disponivel(data, efetivo, restrito):
     # disp = list(efetivo.NOME.values)
+    if isinstance(data, dt):
+        data = data.date()
     disp = set(efetivo.NOME.values)
     for i in efetivo[(efetivo.EMBARQUE > data) | (efetivo.DESEMBARQUE <= data)].NOME.values:
         # disp.remove(i)
-        disp = disp - set(i)
+        disp.discard(i)
     for i in restrito[(restrito.INICIAL <= data) & (restrito.FINAL >= data)].NOME.unique():
         if i in disp:
             # disp.remove(i)
-            disp = disp - set(i)
-    return disp
+            disp.discard(i)
+    return sorted(disp)
 
 def que_se_segue(passa, efetivo, hoje, tabela):
     efetivos = list(efetivo.NOME.values)
@@ -101,9 +105,8 @@ def que_se_segue(passa, efetivo, hoje, tabela):
 esc_preta = pd.DataFrame({'DATA':preta})
 esc_vermelha = pd.DataFrame({'DATA':vermelha})
 
-esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6), 'NOME'] = '1T Brenno Carvalho'
-esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1), 'NOME'] = 'CT(IM) Sêrro'
-
+esc_preta.loc[esc_preta.DATA == dt(2025, 1, 6).date(), 'NOME'] = '1T Brenno Carvalho'
+esc_vermelha.loc[esc_vermelha.DATA == dt(2025, 1, 1).date(), 'NOME'] = 'CT(IM) Sêrro'
 
 
 esc_preta.set_index('DATA', inplace=True)
@@ -180,27 +183,43 @@ for i in range(10):
     geral_corrida.loc[pd.to_datetime(dt(2025,2,28) + td(days=i))] = carnaval[i]
 
 
-df1 = pd.DataFrame({'DIA': [d for d in datas if d.month == gera_mes], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes]})
-df2 = pd.DataFrame({'DIA': [d for d in datas if d.month == (gera_mes+1)%12], 'TABELA':['V' if d in vermelha else 'P' for d in datas if d.month == (gera_mes+1)%12], 'NOME':[geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == (gera_mes+1)%12]})
+df1 = pd.DataFrame(
+    {
+        'DIA': [d for d in datas if d.month == gera_mes],
+        'TABELA': ['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes],
+        'NOME': [geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes],
+    }
+)
+proximo_mes = (gera_mes % 12) + 1
+df2 = pd.DataFrame(
+    {
+        'DIA': [d for d in datas if d.month == proximo_mes],
+        'TABELA': ['V' if d in vermelha else 'P' for d in datas if d.month == proximo_mes],
+        'NOME': [geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == proximo_mes],
+    }
+)
 
-df1.loc[(df1.DIA >= dt(2025,3,1)) & (df1.DIA <= dt(2025,3,9)), 'TABELA'] = 'R'
+df1.loc[(df1.DIA >= dt(2025, 3, 1).date()) & (df1.DIA <= dt(2025, 3, 9).date()), 'TABELA'] = 'R'
 
-if dt.today() in preta:
-    retem1 = preta[preta.index(dt.today())+2]
-elif dt.today() in vermelha:
-    retem1 = vermelha[vermelha.index(dt.today()) + 2]
+hoje = dt.today().date()
+amanha = hoje + td(days=1)
 
-if (dt.today() + td(days=1)) in preta:
-    retem2 = preta[preta.index(dt.today() + td(days=1))+2]
-elif (dt.today() + td(days=1)) in vermelha:
-    retem2 = vermelha[vermelha.index(dt.today() + td(days=1)) + 2]
+if hoje in preta:
+    retem1 = preta[preta.index(hoje)+2]
+elif hoje in vermelha:
+    retem1 = vermelha[vermelha.index(hoje) + 2]
+
+if amanha in preta:
+    retem2 = preta[preta.index(amanha)+2]
+elif amanha in vermelha:
+    retem2 = vermelha[vermelha.index(amanha) + 2]
 
 col1, col2 = st.columns(2)
 
 with col1:
-    st.title(f'OSE de {dt.today().strftime('%d/%m')}:')
-    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>', unsafe_allow_html=True)
-    st.markdown(f'<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem1)][0]}</h2>', unsafe_allow_html=True)
+    st.title(f"OSE de {dt.today().strftime('%d/%m')}:")
+    st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today())][0]}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem1)][0]}</h2>", unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
@@ -211,9 +230,9 @@ with col1:
 
 
 with col2:
-    st.title(f'OSE de {(dt.today() + td(days=1)).strftime('%d/%m')}:')
-    st.markdown(f'<h2>{geral_corrida.loc[pd.to_datetime(dt.today() + td(days=1))][0]}</h2>', unsafe_allow_html=True)
-    st.markdown(f'<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem2)][0]}</h2>', unsafe_allow_html=True)
+    st.title(f"OSE de {(dt.today() + td(days=1)).strftime('%d/%m')}:")
+    st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today() + td(days=1))][0]}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem2)][0]}</h2>", unsafe_allow_html=True)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
