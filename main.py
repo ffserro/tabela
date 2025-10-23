@@ -92,12 +92,16 @@ def get_disponivel(data, efetivo, restrito):
 
 def que_se_segue(passa, efetivo, hoje, tabela):
     efetivos = list(efetivo.NOME.values)
-    efetivos_idx = {nome:i for i,nome in enumerate(efetivos)}
     if tabela == 'p':
         efetivos = efetivos[::-1]
-    for i in range(1, len(efetivos)):
-        # cara = efetivos[efetivos.index(passa) - i]
-        cara = efetivos[efetivos_idx[passa] - 1]
+
+    efetivos_idx = {nome: idx for idx, nome in enumerate(efetivos)}
+    if passa not in efetivos_idx:
+        return None
+
+    base_idx = efetivos_idx[passa]
+    for offset in range(1, len(efetivos)):
+        cara = efetivos[base_idx - offset]
         if cara in hoje:
             return cara
     
