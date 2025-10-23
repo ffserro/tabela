@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import pandas as pd
-from datetime import date as dt, timedelta as td
+from datetime import datetime as dt, timedelta as td
 from calendar import monthrange
 
 import holidays
@@ -41,9 +41,9 @@ def restrito_update():
 ano = 2025
 meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-datas = list(map(dt.date, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
+# datas = list(map(dt.date, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
 
-# datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
+datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
 
 # datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
 
