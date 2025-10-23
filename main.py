@@ -191,7 +191,7 @@ df1 = pd.DataFrame(
     {
         'DIA': [d for d in datas if d.month == gera_mes],
         'TABELA': ['V' if d in vermelha else 'P' for d in datas if d.month == gera_mes],
-        'NOME': [geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == gera_mes],
+        'NOME': [geral_corrida.loc[pd.to_datetime(d)].values[0] for d in datas if d.month == gera_mes],
     }
 )
 proximo_mes = (gera_mes % 12) + 1
@@ -199,7 +199,7 @@ df2 = pd.DataFrame(
     {
         'DIA': [d for d in datas if d.month == proximo_mes],
         'TABELA': ['V' if d in vermelha else 'P' for d in datas if d.month == proximo_mes],
-        'NOME': [geral_corrida.loc[pd.to_datetime(d)][0] for d in datas if d.month == proximo_mes],
+        'NOME': [geral_corrida.loc[pd.to_datetime(d)].values[0] for d in datas if d.month == proximo_mes],
     }
 )
 
@@ -222,8 +222,8 @@ col1, col2 = st.columns(2)
 
 with col1:
     st.title(f"OSE de {dt.today().date().strftime('%d/%m')}:")
-    st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today().date())][0]}</h2>", unsafe_allow_html=True)
-    st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem1)][0]}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today().date())].values[0]}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem1)].values[0]}</h2>", unsafe_allow_html=True)
     st.divider()    
     st.title(f'Tabela de {meses[gera_mes]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
@@ -236,7 +236,7 @@ with col1:
 with col2:
     st.title(f"OSE de {(dt.today().date() + td(days=1)).strftime('%d/%m')}:")
     st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today().date() + td(days=1))][0]}</h2>", unsafe_allow_html=True)
-    st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem2)][0]}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem2)].values[0]}</h2>", unsafe_allow_html=True)
     st.divider()  
     st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
