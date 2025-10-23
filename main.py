@@ -50,7 +50,9 @@ datas = [ts.to_pydatetime() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-3
 #######
 # datas = [i for i in datas if i.month in (dt.today().month, (dt.today().month-1)%12+1)]
 
-feriados = list(map(dt, sorted(holidays.Brazil()[dt(ano,1,1): dt(ano+1,1,1)] + [dt.date(dt(ano, 6, 11)), dt.date(dt(ano, 12, 13)), dt.date(dt(ano, 6, 19))])))
+# feriados = list(map(dt, sorted(holidays.Brazil()[dt(ano,1,1): dt(ano+1,1,1)] + [dt.date(dt(ano, 6, 11)), dt.date(dt(ano, 12, 13)), dt.date(dt(ano, 6, 19))])))
+
+feriados = list(map(dt.fromisoformat, [i. isoformat() for i in sorted(holidays.Brazil()[dt(2025,1,1): dt(2025+1,1,1)] + [dt.date(dt(2025, 6, 11)), dt.date(dt(2025, 12, 13)), dt.date(dt(2025, 6, 19))])]))
 
 vermelha, preta = [], []
 
