@@ -39,7 +39,7 @@ def restrito_update():
     return st.session_state.restrito
 
 ano = 2025
-meses = ['-', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
+meses = ['DEZ', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV']
 
 # datas = list(map(dt.date, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
 
@@ -238,10 +238,10 @@ with col2:
     st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today().date() + td(days=1))].values[0]}</h2>", unsafe_allow_html=True)
     st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem2)].values[0]}</h2>", unsafe_allow_html=True)
     st.divider()  
-    st.title(f'Tabela de {meses[(gera_mes+1)%13]}')
+    st.title(f'Tabela de {meses[(gera_mes+1)%12]}')
     df2['DIA'] = pd.to_datetime(df2.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df2, hide_index=True, height=1125)
-    st.session_state.conn.update(worksheet=meses[(gera_mes+1)%13], data=df2)
+    st.session_state.conn.update(worksheet=meses[(gera_mes+1)%12], data=df2)
     st.write('Conflitos:')
     st.write(pd.DataFrame(filtra(gera_mes+1, conflitos)).T.rename(columns={0:'DE', 1:'PARA'}))
 
