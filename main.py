@@ -9,8 +9,6 @@ from dateutil import tz
 
 tzinfo = tz.gettz('America/Sao_Paulo')
 
-# st.title('TABELONA DO 💡')
-
 st.session_state.conn = st.connection('gsheets', type=GSheetsConnection)
 
 def troca_update():
@@ -38,19 +36,10 @@ def restrito_update():
     st.session_state.restrito.loc[st.session_state.restrito.MOTIVO=='Viagem', 'FINAL'] = st.session_state.restrito.loc[st.session_state.restrito.MOTIVO=='Viagem', 'FINAL'] + td(days=1)
     return st.session_state.restrito
 
-ano = dt.todat().year
+ano = dt.today().year
 meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
-# datas = list(map(dt.date, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
-
 datas = [ts.date() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
-
-# datas = [dt(ano, 1, 1) + td(i) for i in range(365)]
-
-#######
-# datas = [i for i in datas if i.month in (dt.today().month, (dt.today().month-1)%12+1)]
-
-# feriados = list(map(dt, sorted(holidays.Brazil()[dt(ano,1,1): dt(ano+1,1,1)] + [dt.date(dt(ano, 6, 11)), dt.date(dt(ano, 12, 13)), dt.date(dt(ano, 6, 19))])))
 
 feriados = sorted(
     list(holidays.Brazil()[dt(2025, 1, 1) : dt(2025 + 1, 1, 1)])
@@ -244,4 +233,3 @@ with col2:
     st.session_state.conn.update(worksheet=meses[(gera_mes)%12], data=df2)
     st.write('Conflitos:')
     st.write(pd.DataFrame(filtra(gera_mes+1, conflitos)).T.rename(columns={0:'DE', 1:'PARA'}))
-
