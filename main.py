@@ -38,8 +38,8 @@ def restrito_update():
     st.session_state.restrito.loc[st.session_state.restrito.MOTIVO=='Viagem', 'FINAL'] = st.session_state.restrito.loc[st.session_state.restrito.MOTIVO=='Viagem', 'FINAL'] + td(days=1)
     return st.session_state.restrito
 
-ano = 2025
-meses = ['DEZ', 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV']
+ano = dt.todat().year
+meses = ['JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN', 'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ']
 
 # datas = list(map(dt.date, pd.date_range(f'{ano}-01-01', f'{ano}-12-31')))
 
@@ -225,10 +225,10 @@ with col1:
     st.markdown(f"<h2>{geral_corrida.loc[pd.to_datetime(dt.today().date())].values[0]}</h2>", unsafe_allow_html=True)
     st.markdown(f"<h6>Retém: {geral_corrida.loc[pd.to_datetime(retem1)].values[0]}</h2>", unsafe_allow_html=True)
     st.divider()    
-    st.title(f'Tabela de {meses[gera_mes]}')
+    st.title(f'Tabela de {meses[(gera_mes-1)%12]}')
     df1['DIA'] = pd.to_datetime(df1.DIA).dt.strftime('%d/%m/%Y')
     st.dataframe(df1, hide_index=True, height=1125)
-    st.session_state.conn.update(worksheet=meses[gera_mes], data=df1)
+    st.session_state.conn.update(worksheet=meses[gera_mes-1], data=df1)
     st.write('Conflitos:')
     st.write(pd.DataFrame(filtra(gera_mes, conflitos)).T.rename(columns={0:'DE', 1:'PARA'}))
 
