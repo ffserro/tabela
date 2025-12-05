@@ -347,6 +347,3 @@ with col2:
     st.session_state.conn.update(worksheet=meses[df2_mes - 1], data=df2)
     st.write('Conflitos:')
     st.write(pd.DataFrame(filtra(df2_mes, df2_conflitos)).T.rename(columns={0:'DE', 1:'PARA'}))
-
-
-st.write(df_base)
