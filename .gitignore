@@ -1,0 +1,5 @@
+.streamlit
+.venv
+.python-version
+.pyproject.toml
+uv.lock
