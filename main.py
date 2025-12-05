@@ -43,6 +43,12 @@ def efetivo_update():
     st.session_state.efetivo = efetivo_df
     return efetivo_df
 
+def pororoca_update():
+    pororoca_df = st.session_state.conn.read(worksheet='POROROCA', ttl=60).copy()
+    pororoca_df['DATA'] = pd.to_datetime(pororoca_df.DATA, dayfirst=True)
+    st.session_state.pororoca = pororoca_df
+    return pororoca_df
+
 def restrito_update():
     restrito_df = st.session_state.conn.read(worksheet='REST', ttl=60).copy()
     restrito_df['INICIAL'] = pd.to_datetime(restrito_df['INICIAL'], dayfirst=True).dt.date
@@ -248,16 +254,16 @@ def filtra(mes, conflitos):
 
 gera_mes = dt.today().month
 
-
-### POROROCA
-# carnaval = ['CT Tarle', '2T(IM) Soares Costa', 'CT Felipe Gondim', '1T Brenno Carvalho', 'SO-MO Alvarez', 'CT Damasceno', '1T Brenno Carvalho', 'CT(IM) Sêrro', 'CT Belmonte', '2T(IM) Soares Costa']
-# for i in range(10):
-#     geral_corrida.loc[pd.to_datetime(dt(ANO_REFERENCIA,2,28) + td(days=i))] = carnaval[i]
-
 geral_corrida.sort_index(inplace=True)
 
 df_base['DIA'] = pd.to_datetime(df_base['DIA'])
 df_base['MES'] = df_base['DIA'].dt.month
+
+pororoca = pororoca_update()
+
+for _, row in pororoca.iterrows():
+    df_base.loc[df_base.DIA==row.DATA, 'NOME'] = row.NOME
+    df_base.loc[df_base.DIA==row.DATA, 'TABELA'] = 'R'
 
 df1 = pd.DataFrame(
     {
@@ -290,8 +296,6 @@ df2 = pd.DataFrame(
         'NOME': df2_base.loc[df2_base.MES == df2_mes, 'NOME'],
     }
 )
-
-# df1.loc[(df1.DIA >= dt(ANO_REFERENCIA, 3, 1)) & (df1.DIA <= dt(ANO_REFERENCIA, 3, 9)), 'TABELA'] = 'R'
 
 hoje = dt.today().date()
 amanha = hoje + td(days=1)
@@ -343,3 +347,6 @@ with col2:
     st.session_state.conn.update(worksheet=meses[df2_mes - 1], data=df2)
     st.write('Conflitos:')
     st.write(pd.DataFrame(filtra(df2_mes, df2_conflitos)).T.rename(columns={0:'DE', 1:'PARA'}))
+
+
+st.write(df_base)
