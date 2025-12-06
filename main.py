@@ -49,6 +49,21 @@ def pororoca_update():
     st.session_state.pororoca = pororoca_df
     return pororoca_df
 
+def aplicar_pororoca(df, pororoca):
+    if pororoca is None or pororoca.empty:
+        return df
+
+    df['DIA'] = pd.to_datetime(df['DIA']).dt.normalize()
+    datas_pororoca = pd.to_datetime(pororoca['DATA']).dt.normalize()
+
+    for data, nome in zip(datas_pororoca, pororoca['NOME']):
+        mask = df['DIA'] == data
+        if mask.any():
+            df.loc[mask, 'NOME'] = nome
+            df.loc[mask, 'TABELA'] = 'R'
+
+    return df
+
 def restrito_update():
     restrito_df = st.session_state.conn.read(worksheet='REST', ttl=60).copy()
     restrito_df['INICIAL'] = pd.to_datetime(restrito_df['INICIAL'], dayfirst=True).dt.date
@@ -260,10 +275,7 @@ df_base['DIA'] = pd.to_datetime(df_base['DIA'])
 df_base['MES'] = df_base['DIA'].dt.month
 
 pororoca = pororoca_update()
-
-for _, row in pororoca.iterrows():
-    df_base.loc[df_base.DIA==row.DATA, 'NOME'] = row.NOME
-    df_base.loc[df_base.DIA==row.DATA, 'TABELA'] = 'R'
+aplicar_pororoca(df_base, pororoca)
 
 df1 = pd.DataFrame(
     {
@@ -289,6 +301,7 @@ if gera_mes == 12:
     df2_base = calendario_proximo['df_base']
     df2_conflitos = calendario_proximo['conflitos']
     df2_mes = 1
+    aplicar_pororoca(df2_base, pororoca)
 df2 = pd.DataFrame(
     {
         'DIA': df2_base.loc[df2_base.MES == df2_mes, 'DIA'],
