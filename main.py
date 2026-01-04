@@ -133,8 +133,8 @@ def gera_calendario(ano, licpag, efetivo, restrito, troca, nome_preta_anterior=N
     preta_set = set(preta)
     vermelha_set = set(vermelha)
 
-    esc_preta = pd.DataFrame({'DATA':preta})
-    esc_vermelha = pd.DataFrame({'DATA':vermelha})
+    esc_preta = pd.DataFrame({'DATA': preta, 'NOME': pd.NA})
+    esc_vermelha = pd.DataFrame({'DATA': vermelha, 'NOME': pd.NA})
 
     esc_preta.set_index('DATA', inplace=True)
     esc_vermelha.set_index('DATA', inplace=True)
