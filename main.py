@@ -117,7 +117,7 @@ def gera_calendario(ano, licpag, efetivo, restrito, troca, nome_preta_anterior=N
         dt(ano, 1, 26).date(),  # Aniversário da Cidade de Santos
         dt(ano, 6, 11).date(),  # Batalha Naval de Riachuelo
         dt(ano, 12, 13).date(), # Dia do Marinheiro
-        dt(ano, 6, 19).date(),  # Corpus Christi
+        dt(ano, 6, 4).date(),   # Corpus Christi
         dt(ano, 10, 27).date(), # Dia do Servidor Público
     }
     feriados_base = holidays.Brazil(years=ano)
