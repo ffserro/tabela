@@ -114,10 +114,11 @@ def que_se_segue(passa, ordem, disponiveis):
 def gera_calendario(ano, licpag, efetivo, restrito, troca, nome_preta_anterior=None, nome_vermelha_anterior=None):
     datas = [ts.date() for ts in pd.date_range(f'{ano}-01-01', f'{ano}-12-31')]
     feriados_extra = {
-        dt(ano, 6, 11).date(),
-        dt(ano, 12, 13).date(),
-        dt(ano, 6, 19).date(),
-        dt(ano, 10, 27).date(),
+        dt(ano, 1, 26).date(),  # Aniversário da Cidade de Santos
+        dt(ano, 6, 11).date(),  # Batalha Naval de Riachuelo
+        dt(ano, 12, 13).date(), # Dia do Marinheiro
+        dt(ano, 6, 19).date(),  # Corpus Christi
+        dt(ano, 10, 27).date(), # Dia do Servidor Público
     }
     feriados_base = holidays.Brazil(years=ano)
     feriados = sorted(set(feriados_base.keys()) | feriados_extra)
